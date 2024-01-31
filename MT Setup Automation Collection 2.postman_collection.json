@@ -1089,6 +1089,648 @@
 					"response": []
 				},
 				{
+					"name": "Editing Tenants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else {",
+									"    // Validate the response structure",
+									"    pm.test('Response Validation', function () {",
+									"        pm.expect(responseBody).to.be.an('object');",
+									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
+									"        pm.expect(responseBody).to.have.property('id').that.is.a('string');",
+									"",
+									"        // Print the success message and ID",
+									"        console.log('Success:', responseBody.success);",
+									"        console.log('Package ID:', responseBody.id);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.tenant.edit&server=1&id={{TenantID}}&tenant_name={{$randomCompanyName}}&apusername=admin&appassword=Test123!",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.tenant.edit"
+								},
+								{
+									"key": "server",
+									"value": "1",
+									"description": "Server ID which must be set to 1"
+								},
+								{
+									"key": "id",
+									"value": "{{TenantID}}",
+									"description": "Tenant ID. For editing more tenants use CSV filr Add&Edit-Tenants.csv"
+								},
+								{
+									"key": "status",
+									"value": "{{TenantStatus}}",
+									"description": "Status (Not Active=0, Active=1, Suspended=2)",
+									"disabled": true
+								},
+								{
+									"key": "tenant_name",
+									"value": "{{$randomCompanyName}}",
+									"description": "Tenant Name (Required). Should be a valid FQDN (Fully Qualified Domain Name). (Regex: /^.+$/)"
+								},
+								{
+									"key": "tenant_code",
+									"value": "{{tenant_code}}",
+									"description": "Unique 3-digit Tenant Code (Required). (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "package",
+									"value": "{{TenantPackageID}}",
+									"description": "Tenant Package ID (Required). Can be obtained with package object. (Regex: /^\\\\d+$/)",
+									"disabled": true
+								},
+								{
+									"key": "ext_length",
+									"value": "{{ExtLength}}",
+									"description": "Extensions length (Required). Can be in range 2-16 ONLY. (Regex: /^([2-9]|(1[0-6]))$/)",
+									"disabled": true
+								},
+								{
+									"key": "country",
+									"value": "{{Country}}",
+									"description": "Country ID (Required).Can be obtained with route object. (Regex: /^\\\\d{1,10}$/)",
+									"disabled": true
+								},
+								{
+									"key": "area_code",
+									"value": "",
+									"description": "Area Code. (Regex: /^\\\\d{1,50}$/)",
+									"disabled": true
+								},
+								{
+									"key": "national",
+									"value": "{{NationalCode}}",
+									"description": "National Code (Required). (Regex: /^\\\\d{1,10}$/)",
+									"disabled": true
+								},
+								{
+									"key": "international",
+									"value": "{{InternationalCode}}",
+									"description": "International Code (Required). (Regex: /^\\\\d{1,10}$/)",
+									"disabled": true
+								},
+								{
+									"key": "glocom_dns_srv_lookup",
+									"value": "",
+									"description": "gloCOM Use DNS SRV Lookup. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "glocomproxy",
+									"value": "",
+									"description": "gloCOM SIP Proxy. (Regex: /^.+$/)",
+									"disabled": true
+								},
+								{
+									"key": "apusername",
+									"value": "admin",
+									"description": "HTTP username. (Regex: /^.+$/)"
+								},
+								{
+									"key": "appassword",
+									"value": "Test123!",
+									"description": "HTTP password. (Regex: /^\\\\S.+\\\\S$/)"
+								},
+								{
+									"key": "defaultserver",
+									"value": "",
+									"description": "Default Server. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "announcetrunks",
+									"value": "",
+									"description": "Announce Trunks. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "absolutetimeout",
+									"value": "",
+									"description": "Absolute Timeout in sec. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "cdrvoicemail",
+									"value": "",
+									"description": "Voicemail in CDRs\n2: As Voicemail\n1: As Not Answered calls\n0: As Answered calls\n(Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "faxformat",
+									"value": "",
+									"description": "FAX page format\n-letter\n-legal\n-A4\n-auto",
+									"disabled": true
+								},
+								{
+									"key": "faxfiletype",
+									"value": "",
+									"description": "FAX file type\n1: Both PDF and TIFF\n2: Only PDF\n3: Only TIFF",
+									"disabled": true
+								},
+								{
+									"key": "default_location",
+									"value": "",
+									"description": "Default Extension Location (Local=1, Remote=2)",
+									"disabled": true
+								},
+								{
+									"key": "enabletcalls",
+									"value": "",
+									"description": "Enable Tenant to Tenant calls. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "disabletcid",
+									"value": "",
+									"description": "Disable CallerID rewrite for tenant to tenant calls. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "tenantcid",
+									"value": "",
+									"description": "Default CallerID. (Regex: /^.+$/)",
+									"disabled": true
+								},
+								{
+									"key": "tenant_faxcid",
+									"value": "",
+									"description": "Default Fax CallerID. (Regex: /^.+$/)",
+									"disabled": true
+								},
+								{
+									"key": "usedefaultcid",
+									"value": "",
+									"description": "Use Default CallerID for tenant to tenant calls. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "usedidcid",
+									"value": "",
+									"description": "Use DIDs as CallerID for tenant to tenant calls. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "finde164",
+									"value": "",
+									"description": "Find E.164 numbers in DIDs. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "recordlimit",
+									"value": "",
+									"description": "Number of objects per page (Default: 10). (Regex: /^\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "showdirosc",
+									"value": "",
+									"description": "Show Directory in OSC. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "recordglobal",
+									"value": "",
+									"description": "Record calls by default. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "recordsilent",
+									"value": "",
+									"description": "Silent recording by default. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "mp3_auto_conv",
+									"value": "",
+									"description": "Convert recordings to mp3 on generation. (Regex: /^(yes|keep|no)$/)",
+									"disabled": true
+								},
+								{
+									"key": "recordbeep",
+									"value": "",
+									"description": "Play Periodic Beep in sec. (Regex: /^\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "recordformat",
+									"value": "",
+									"description": "Recordings format\n-gsm: GSM\n-wav: WAV\n-wav49: WAV49\n-g729: G729 native → GSM\n-ogg: OGG",
+									"disabled": true
+								},
+								{
+									"key": "audiolang",
+									"value": "",
+									"description": "Audio Language. (Regex: /^.+$/)",
+									"disabled": true
+								},
+								{
+									"key": "cpark_timeout",
+									"value": "",
+									"description": "Enhanced Call Parking Timeout (sec). (Regex: /^\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "cpark_dial",
+									"value": "",
+									"description": "Enhanced Call Parking Announce Extension. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "cpark_goto",
+									"value": "",
+									"description": "Enhanced Call Parking Timeout Extension. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "limitsound",
+									"value": "",
+									"description": "Play Sound. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "limitemail",
+									"value": "",
+									"description": "Enable send email option. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "notifyemail",
+									"value": "",
+									"description": "Notification email. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "leavenational",
+									"value": "",
+									"description": "Leave National Code. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "currency",
+									"value": "",
+									"description": "Currency symbol/ISO code. (Regex: /^.{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "currencypos",
+									"value": "",
+									"description": "Currency writing convention\nleft: Symbol before amount\nright: Symbol after amount.\n(Regex: /^(left|right)$/)",
+									"disabled": true
+								},
+								{
+									"key": "dialed_num_minimum_length",
+									"value": "",
+									"description": "Dialed number minimum length. (Regex: /^\\\\d{1,4}$/)",
+									"disabled": true
+								},
+								{
+									"key": "pstn_mode",
+									"value": "",
+									"description": "PSTN numbering mode. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "callgroups",
+									"value": "",
+									"description": "Call groups/Pickup Groups (comma separated). (Regex: /^[0-9]+(,[0-9]+)*$/)",
+									"disabled": true
+								},
+								{
+									"key": "localcodecs",
+									"value": "",
+									"description": "Local Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/)",
+									"disabled": true
+								},
+								{
+									"key": "remotecodecs",
+									"value": "",
+									"description": "Remote Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/).\"",
+									"disabled": true
+								},
+								{
+									"key": "networkcodecs",
+									"value": "",
+									"description": "Network Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/).\"",
+									"disabled": true
+								},
+								{
+									"key": "hdcheck",
+									"value": "",
+									"description": "Login Attempts Check. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "hdlockext",
+									"value": "",
+									"description": "Lock Extension After X Failed Attempts.  (Regex: /^\\\\d{1}$/)",
+									"disabled": true
+								},
+								{
+									"key": "hdlockdevice",
+									"value": "",
+									"description": "Lock Phone After X Locked Extensions.  (Regex: /^\\\\d{1}$/)",
+									"disabled": true
+								},
+								{
+									"key": "hdautologout",
+									"value": "",
+									"description": "Automatic Log Out. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "hdlogoutinactive",
+									"value": "",
+									"description": "Log Out After X Hours of Inactivity. (Regex: /^\\\\d{1}$/)",
+									"disabled": true
+								},
+								{
+									"key": "ringtonelocal",
+									"value": "",
+									"description": "Ringtone for Local calls. (Regex: /^.+$/)",
+									"disabled": true
+								},
+								{
+									"key": "hidecallerid",
+									"value": "",
+									"description": "Hide CallerID in OSC. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "allowescallerid",
+									"value": "",
+									"description": "Allow ES CallerID\" for Call Forwarding. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "enablecnamlookup",
+									"value": "",
+									"description": "Enable CallerID CNAM lookup. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "setcidforgrouphunt",
+									"value": "",
+									"description": "Set CallerID for Group Hunt calls. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "cidmatchdid",
+									"value": "",
+									"description": "Only Allow Trunk CallerID within DID range. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "dropanonymous",
+									"value": "",
+									"description": "Drop Anonymous calls. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "didsaveupdatecid",
+									"value": "",
+									"description": "On DID save update ES/CID/Trunks. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "forceunknown",
+									"value": "",
+									"description": "Do not allow users sending any CallerID. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "hideextnodir",
+									"value": "",
+									"description": "Hide Extensions with no department (gloCOM). (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "custompresencetime",
+									"value": "",
+									"description": "gloCOM presence offline delay (min). (Regex: /^\\\\d{1,4}$/)",
+									"disabled": true
+								},
+								{
+									"key": "usedynfeatures",
+									"value": "",
+									"description": "Use Dynamic Features. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "nobillingfwd",
+									"value": "",
+									"description": "Disable Billing for Call Forwarding. (deprecated and will be soon replaced with cf_call_rating_disable). (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "cf_call_rating_disable",
+									"value": "",
+									"description": "Disable Call Rating for Call Forwarding. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "jbimpl",
+									"value": "",
+									"description": "Jitter Buffer (inherit, disabled, fixed, adaptive)",
+									"disabled": true
+								},
+								{
+									"key": "jbmaxsize",
+									"value": "",
+									"description": "Max length (ms). (Regex: /^\\\\d{1,4}$/)",
+									"disabled": true
+								},
+								{
+									"key": "jbresyncthreshold",
+									"value": "",
+									"description": "Re-sync threshold. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "jbtargetextra",
+									"value": "",
+									"description": "Target extra. (Regex: /^\\\\d{1,4}$/)",
+									"disabled": true
+								},
+								{
+									"key": "allowextipauth",
+									"value": "",
+									"description": "Allow IP Address Authentication for Extensions (Yes=1, No=0). (Regex: /^(1|0|2)$/).",
+									"disabled": true
+								},
+								{
+									"key": "voiceskippin",
+									"value": "",
+									"description": "Skip Voicemail PIN Prompt (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "email_from",
+									"value": "",
+									"description": "From E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "vm_email_from",
+									"value": "",
+									"description": "Voicemail From E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "local_channels",
+									"value": "",
+									"description": "Local Channels. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "remote_channels",
+									"value": "",
+									"description": "Remote Channels. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "conferences",
+									"value": "",
+									"description": "Conferences. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "queues",
+									"value": "",
+									"description": "Queues. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "auto_attendants",
+									"value": "",
+									"description": "Auto Attendants. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "dahdi",
+									"value": "",
+									"description": "DAHDI. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "dids_notify_email",
+									"value": "",
+									"description": "Notification E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "dids_notify_order",
+									"value": "",
+									"description": "Order By. (Regex: /^(did|date)$/)",
+									"disabled": true
+								},
+								{
+									"key": "es_ambulance",
+									"value": "",
+									"description": "Ambulance. (Regex: /^\\\\d{3,16}$/)",
+									"disabled": true
+								},
+								{
+									"key": "es_fire",
+									"value": "",
+									"description": "Fire. (Regex: /^\\\\d{3,16}$/)",
+									"disabled": true
+								},
+								{
+									"key": "es_police",
+									"value": "",
+									"description": "Police. (Regex: /^\\\\d{3,16}$/)",
+									"disabled": true
+								},
+								{
+									"key": "es_notification_email",
+									"value": "",
+									"description": "Notification E-mail. (Regex: /^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,30};?)+$/)",
+									"disabled": true
+								},
+								{
+									"key": "ldap_enabled",
+									"value": "",
+									"description": "Enable LDAP (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "ldap_local_exts",
+									"value": "",
+									"description": "Include System Extensions:(Yes=1, No=0, Not set='')",
+									"disabled": true
+								},
+								{
+									"key": "ldap_hotdesking",
+									"value": "",
+									"description": "Enable LDAP For Hot Desking Devices:(Yes=1, No=0, Not set='')",
+									"disabled": true
+								},
+								{
+									"key": "ldap_password",
+									"value": "",
+									"description": "LDAP password. (Regex: /^.+$/)",
+									"disabled": true
+								},
+								{
+									"key": "appasword",
+									"value": "",
+									"description": "(Regex: /^\\\\S.+\\\\S$/)",
+									"disabled": true
+								},
+								{
+									"key": "emerg_location_header",
+									"value": "",
+									"description": "Emergency Location Header. (Regex: /^[\\\\w\\\\-,]{1,100}$/)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Listing Tenants",
 					"event": [
 						{
@@ -20118,6 +20760,541 @@
 			]
 		},
 		{
+			"name": "Ring Groups",
+			"item": [
+				{
+					"name": "Adding Ring Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else {",
+									"    // Validate the response structure",
+									"    pm.test('Response Validation', function () {",
+									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
+									"        pm.expect(responseBody).to.have.property('id').that.is.a('number');",
+									"",
+									"",
+									"        pm.collectionVariables.set(\"RG_ID\", responseBody.id);",
+									"",
+									"        // Print the success message and ID",
+									"        console.log('Success:', responseBody.success);",
+									"        console.log('Ring Group ID:', responseBody.id);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.add&server={{TenantID}}&name=Test_RG_Name&ext=905&extensions=901,902",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ring_group.add",
+									"description": "To add multiple RGs use RGs.csv file."
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Tenant or Server ID (Required). If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
+								},
+								{
+									"key": "name",
+									"value": "Test_RG_Name",
+									"description": "Ring Group name. (Required)"
+								},
+								{
+									"key": "ext",
+									"value": "905",
+									"description": "Ring Group number. (Required)"
+								},
+								{
+									"key": "extensions",
+									"value": "901,902",
+									"description": "List of all ring group extensions separated by ,"
+								},
+								{
+									"key": "max_limit",
+									"value": "",
+									"description": "Number of concurrent calls allowed into Ring Group (default is 1). (Regex: /^\\\\d{1,2}$/)",
+									"disabled": true
+								},
+								{
+									"key": "greeting",
+									"value": "",
+									"description": "Ring Group Greeting All greetings must begin with greeting-. (Regex: /^greeting\\\\-([\\\\w\\\\-]+)$/)",
+									"disabled": true
+								},
+								{
+									"key": "ganswer",
+									"value": "",
+									"description": "Perform Answer on undefined greeting (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "timeout_msg",
+									"value": "",
+									"description": "Timeout message. All timeout messages begin with announce-. (Regex: /^announce\\\\-([\\\\w\\\\-]+)$/)",
+									"disabled": true
+								},
+								{
+									"key": "loops",
+									"value": "",
+									"description": "Number of Ring loops (default is 1). (Regex: /^\\\\d{1,2}$/)",
+									"disabled": true
+								},
+								{
+									"key": "timeout",
+									"value": "",
+									"description": "Timeout for Ring Group (default is 30 seconds). (Regex: /^\\\\d{1,8}$/)",
+									"disabled": true
+								},
+								{
+									"key": "overwrite_timeout",
+									"value": "",
+									"description": "Force Ring Group Timeout (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "dial_options",
+									"value": "",
+									"description": "Dial options (default is r). (Regex: /^\\\\w+$/)",
+									"disabled": true
+								},
+								{
+									"key": "store_cdr",
+									"value": "",
+									"description": "Store Unanswered CDRs (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "last_dest",
+									"value": "",
+									"description": "Last Destination. (Regex: /^(yes|no)$/)",
+									"disabled": true
+								},
+								{
+									"key": "last_dest_vm",
+									"value": "",
+									"description": "Last Destination is Voicemail (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "ring_strategy",
+									"value": "",
+									"description": "Ring Strategy. List of available strategies:\n   all (Default)\n   leastrecent\n   round\n   round_memory",
+									"disabled": true
+								},
+								{
+									"key": "custom_ringtone",
+									"value": "",
+									"description": "Custom Ringtone for SIP devices. (Regex: /^\\\\w+$/)",
+									"disabled": true
+								},
+								{
+									"key": "callerid",
+									"value": "",
+									"description": "Replace Caller ID. (Regex: /^[\\\\+\\\\w\\\\s%]+(\\\\s*<[\\\\+%\\\\w]+>)?$/)",
+									"disabled": true
+								},
+								{
+									"key": "record",
+									"value": "",
+									"description": "Record calls (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "record_silent",
+									"value": "",
+									"description": "Silent Recordings (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "exit_digit",
+									"value": "",
+									"description": "Exit Digit. (Regex: /^\\\\d{1}$/)",
+									"disabled": true
+								},
+								{
+									"key": "exit_ext",
+									"value": "",
+									"description": "Exit Extension. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "confirm_calls",
+									"value": "",
+									"description": "Confirm Calls. (Regex: /^(yes|no)$/)",
+									"disabled": true
+								},
+								{
+									"key": "confirm_msg",
+									"value": "",
+									"description": "Confirmation Message. All confirmation messages begin with rg-announce-.",
+									"disabled": true
+								},
+								{
+									"key": "confirm_answered_msg",
+									"value": "",
+									"description": "Call Answered Message. All call answered messages begin with rg-late-announce-.",
+									"disabled": true
+								},
+								{
+									"key": "call_rating_ext",
+									"value": "",
+									"description": "Call Rating Extension. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editing Ring Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else {",
+									"    // Validate the response structure",
+									"    pm.test('Successfully edited Ring Group!', function () {",
+									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
+									"        pm.expect(responseBody).to.have.property('id').that.is.a('string');",
+									"",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.edit&server={{TenantID}}&id={{RG_ID}}&name=API_RG_Name",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ring_group.edit",
+									"description": "To edit multiple RGs use RGs.csv file."
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Tenant or Server ID (Required). If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
+								},
+								{
+									"key": "id",
+									"value": "{{RG_ID}}",
+									"description": "Ring Group ID. (Required)"
+								},
+								{
+									"key": "name",
+									"value": "API_RG_Name",
+									"description": "Ring Group name."
+								},
+								{
+									"key": "ext",
+									"value": "{{RGNum}}",
+									"description": "Ring Group extension.",
+									"disabled": true
+								},
+								{
+									"key": "extensions",
+									"value": "{{RGExt}}",
+									"description": "List of all ring group extensions separated by ,",
+									"disabled": true
+								},
+								{
+									"key": "max_limit",
+									"value": "",
+									"description": "Number of concurrent calls allowed into Ring Group (default is 1). (Regex: /^\\\\d{1,2}$/)",
+									"disabled": true
+								},
+								{
+									"key": "greeting",
+									"value": "",
+									"description": "Ring Group Greeting All greetings must begin with greeting-. (Regex: /^greeting\\\\-([\\\\w\\\\-]+)$/)",
+									"disabled": true
+								},
+								{
+									"key": "ganswer",
+									"value": "",
+									"description": "Perform Answer on undefined greeting (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "timeout_msg",
+									"value": "",
+									"description": "Timeout message. All timeout messages begin with announce-. (Regex: /^announce\\\\-([\\\\w\\\\-]+)$/)",
+									"disabled": true
+								},
+								{
+									"key": "loops",
+									"value": "",
+									"description": "Number of Ring loops (default is 1). (Regex: /^\\\\d{1,2}$/)",
+									"disabled": true
+								},
+								{
+									"key": "timeout",
+									"value": "",
+									"description": "Timeout for Ring Group (default is 30 seconds). (Regex: /^\\\\d{1,8}$/)",
+									"disabled": true
+								},
+								{
+									"key": "overwrite_timeout",
+									"value": "",
+									"description": "Force Ring Group Timeout (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "dial_options",
+									"value": "",
+									"description": "Dial options (default is r). (Regex: /^\\\\w+$/)",
+									"disabled": true
+								},
+								{
+									"key": "store_cdr",
+									"value": "",
+									"description": "Store Unanswered CDRs (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "last_dest",
+									"value": "",
+									"description": "Last Destination. (Regex: /^(yes|no)$/)",
+									"disabled": true
+								},
+								{
+									"key": "last_dest_vm",
+									"value": "",
+									"description": "Last Destination is Voicemail (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "ring_strategy",
+									"value": "",
+									"description": "Ring Strategy. List of available strategies:\n   all (Default)\n   leastrecent\n   round\n   round_memory",
+									"disabled": true
+								},
+								{
+									"key": "custom_ringtone",
+									"value": "",
+									"description": "Custom Ringtone for SIP devices. (Regex: /^\\\\w+$/)",
+									"disabled": true
+								},
+								{
+									"key": "callerid",
+									"value": "",
+									"description": "Replace Caller ID. (Regex: /^[\\\\+\\\\w\\\\s%]+(\\\\s*<[\\\\+%\\\\w]+>)?$/)",
+									"disabled": true
+								},
+								{
+									"key": "record",
+									"value": "",
+									"description": "Record calls (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "record_silent",
+									"value": "",
+									"description": "Silent Recordings (Specify yes or no)",
+									"disabled": true
+								},
+								{
+									"key": "exit_digit",
+									"value": "",
+									"description": "Exit Digit. (Regex: /^\\\\d{1}$/)",
+									"disabled": true
+								},
+								{
+									"key": "exit_ext",
+									"value": "",
+									"description": "Exit Extension. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "confirm_calls",
+									"value": "",
+									"description": "Confirm Calls. (Regex: /^(yes|no)$/)",
+									"disabled": true
+								},
+								{
+									"key": "confirm_msg",
+									"value": "",
+									"description": "Confirmation Message. All confirmation messages begin with rg-announce-.",
+									"disabled": true
+								},
+								{
+									"key": "confirm_answered_msg",
+									"value": "",
+									"description": "Call Answered Message. All call answered messages begin with rg-late-announce-.",
+									"disabled": true
+								},
+								{
+									"key": "call_rating_ext",
+									"value": "",
+									"description": "Call Rating Extension. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listing Ring Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else if (Object.keys(responseBody).length === 0) {",
+									"    console.log(\"There is no Ring Groups for this Server/Tenant!\");",
+									"    pm.test('No Ring Groups!', function () {",
+									"        pm.expect.fail(\"No Ring Groups for this Server/Tenant!\");",
+									"    });",
+									"} else {",
+									"    // Validate the response structure",
+									"    pm.test('Response Validation', function () {",
+									"        pm.expect(responseBody).to.be.an('object');",
+									"        ",
+									"        // Initialize array to store Ring Group IDs",
+									"        var rgIDs = [];",
+									"        ",
+									"        // Loop through Ring Group data",
+									"        for (var ringGroupID in responseBody) {",
+									"            var ringGroupData = responseBody[ringGroupID];",
+									"            ",
+									"            // Validate specific properties for each Ring Group",
+									"            pm.test('Ring Group ' + ringGroupID + ' Data Validation', function () {",
+									"                pm.expect(ringGroupData).to.be.an('object');",
+									"                pm.expect(ringGroupData).to.have.property('name').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('ext').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('destinations').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('last_dest').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('last_dest_vm').that.is.oneOf(['yes', 'no']);",
+									"                ",
+									"            });",
+									"        }",
+									"        ",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.list&server={{TenantID}}",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ring_group.list"
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Filter Ring Group list by Server/Tenant ID. If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Enhanced Ring Groups",
 			"item": [
 				{
@@ -20869,541 +22046,6 @@
 								{
 									"key": "server",
 									"value": "{{TenantID}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Ring Groups",
-			"item": [
-				{
-					"name": "Adding Ring Groups",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// Check for 200 OK response",
-									"pm.test('Status code is 200 OK', function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"// Parse the response JSON",
-									"var responseBody = pm.response.json();",
-									"",
-									"// Check if there is an error field in the response",
-									"if ('error' in responseBody) {",
-									"    console.error(\"Test Failed: \" + responseBody.error);",
-									"    pm.test('API Response Error', function () {",
-									"        pm.expect.fail(responseBody.error);",
-									"    });",
-									"} else {",
-									"    // Validate the response structure",
-									"    pm.test('Response Validation', function () {",
-									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
-									"        pm.expect(responseBody).to.have.property('id').that.is.a('number');",
-									"",
-									"",
-									"        pm.collectionVariables.set(\"RG_ID\", responseBody.id);",
-									"",
-									"        // Print the success message and ID",
-									"        console.log('Success:', responseBody.success);",
-									"        console.log('Ring Group ID:', responseBody.id);",
-									"    });",
-									"}",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.add&server={{TenantID}}&name=Test_RG_Name&ext=905&extensions=901,902",
-							"protocol": "http",
-							"host": [
-								"{{IP}}"
-							],
-							"path": [
-								"index.php"
-							],
-							"query": [
-								{
-									"key": "apikey",
-									"value": "{{API_Key}}"
-								},
-								{
-									"key": "action",
-									"value": "pbxware.ring_group.add",
-									"description": "To add multiple RGs use RGs.csv file."
-								},
-								{
-									"key": "server",
-									"value": "{{TenantID}}",
-									"description": "Tenant or Server ID (Required). If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
-								},
-								{
-									"key": "name",
-									"value": "Test_RG_Name",
-									"description": "Ring Group name. (Required)"
-								},
-								{
-									"key": "ext",
-									"value": "905",
-									"description": "Ring Group number. (Required)"
-								},
-								{
-									"key": "extensions",
-									"value": "901,902",
-									"description": "List of all ring group extensions separated by ,"
-								},
-								{
-									"key": "max_limit",
-									"value": "",
-									"description": "Number of concurrent calls allowed into Ring Group (default is 1). (Regex: /^\\\\d{1,2}$/)",
-									"disabled": true
-								},
-								{
-									"key": "greeting",
-									"value": "",
-									"description": "Ring Group Greeting All greetings must begin with greeting-. (Regex: /^greeting\\\\-([\\\\w\\\\-]+)$/)",
-									"disabled": true
-								},
-								{
-									"key": "ganswer",
-									"value": "",
-									"description": "Perform Answer on undefined greeting (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "timeout_msg",
-									"value": "",
-									"description": "Timeout message. All timeout messages begin with announce-. (Regex: /^announce\\\\-([\\\\w\\\\-]+)$/)",
-									"disabled": true
-								},
-								{
-									"key": "loops",
-									"value": "",
-									"description": "Number of Ring loops (default is 1). (Regex: /^\\\\d{1,2}$/)",
-									"disabled": true
-								},
-								{
-									"key": "timeout",
-									"value": "",
-									"description": "Timeout for Ring Group (default is 30 seconds). (Regex: /^\\\\d{1,8}$/)",
-									"disabled": true
-								},
-								{
-									"key": "overwrite_timeout",
-									"value": "",
-									"description": "Force Ring Group Timeout (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "dial_options",
-									"value": "",
-									"description": "Dial options (default is r). (Regex: /^\\\\w+$/)",
-									"disabled": true
-								},
-								{
-									"key": "store_cdr",
-									"value": "",
-									"description": "Store Unanswered CDRs (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "last_dest",
-									"value": "",
-									"description": "Last Destination. (Regex: /^(yes|no)$/)",
-									"disabled": true
-								},
-								{
-									"key": "last_dest_vm",
-									"value": "",
-									"description": "Last Destination is Voicemail (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "ring_strategy",
-									"value": "",
-									"description": "Ring Strategy. List of available strategies:\n   all (Default)\n   leastrecent\n   round\n   round_memory",
-									"disabled": true
-								},
-								{
-									"key": "custom_ringtone",
-									"value": "",
-									"description": "Custom Ringtone for SIP devices. (Regex: /^\\\\w+$/)",
-									"disabled": true
-								},
-								{
-									"key": "callerid",
-									"value": "",
-									"description": "Replace Caller ID. (Regex: /^[\\\\+\\\\w\\\\s%]+(\\\\s*<[\\\\+%\\\\w]+>)?$/)",
-									"disabled": true
-								},
-								{
-									"key": "record",
-									"value": "",
-									"description": "Record calls (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "record_silent",
-									"value": "",
-									"description": "Silent Recordings (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "exit_digit",
-									"value": "",
-									"description": "Exit Digit. (Regex: /^\\\\d{1}$/)",
-									"disabled": true
-								},
-								{
-									"key": "exit_ext",
-									"value": "",
-									"description": "Exit Extension. (Regex: /^\\\\d{3}$/)",
-									"disabled": true
-								},
-								{
-									"key": "confirm_calls",
-									"value": "",
-									"description": "Confirm Calls. (Regex: /^(yes|no)$/)",
-									"disabled": true
-								},
-								{
-									"key": "confirm_msg",
-									"value": "",
-									"description": "Confirmation Message. All confirmation messages begin with rg-announce-.",
-									"disabled": true
-								},
-								{
-									"key": "confirm_answered_msg",
-									"value": "",
-									"description": "Call Answered Message. All call answered messages begin with rg-late-announce-.",
-									"disabled": true
-								},
-								{
-									"key": "call_rating_ext",
-									"value": "",
-									"description": "Call Rating Extension. (Regex: /^\\\\d{3}$/)",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Editing Ring Groups",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// Check for 200 OK response",
-									"pm.test('Status code is 200 OK', function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"// Parse the response JSON",
-									"var responseBody = pm.response.json();",
-									"",
-									"// Check if there is an error field in the response",
-									"if ('error' in responseBody) {",
-									"    console.error(\"Test Failed: \" + responseBody.error);",
-									"    pm.test('API Response Error', function () {",
-									"        pm.expect.fail(responseBody.error);",
-									"    });",
-									"} else {",
-									"    // Validate the response structure",
-									"    pm.test('Successfully edited Ring Group!', function () {",
-									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
-									"        pm.expect(responseBody).to.have.property('id').that.is.a('string');",
-									"",
-									"    });",
-									"}",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.edit&server={{TenantID}}&id={{RG_ID}}&name=API_RG_Name",
-							"protocol": "http",
-							"host": [
-								"{{IP}}"
-							],
-							"path": [
-								"index.php"
-							],
-							"query": [
-								{
-									"key": "apikey",
-									"value": "{{API_Key}}"
-								},
-								{
-									"key": "action",
-									"value": "pbxware.ring_group.edit",
-									"description": "To edit multiple RGs use RGs.csv file."
-								},
-								{
-									"key": "server",
-									"value": "{{TenantID}}",
-									"description": "Tenant or Server ID (Required). If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
-								},
-								{
-									"key": "id",
-									"value": "{{RG_ID}}",
-									"description": "Ring Group ID. (Required)"
-								},
-								{
-									"key": "name",
-									"value": "API_RG_Name",
-									"description": "Ring Group name."
-								},
-								{
-									"key": "ext",
-									"value": "{{RGNum}}",
-									"description": "Ring Group extension.",
-									"disabled": true
-								},
-								{
-									"key": "extensions",
-									"value": "{{RGExt}}",
-									"description": "List of all ring group extensions separated by ,",
-									"disabled": true
-								},
-								{
-									"key": "max_limit",
-									"value": "",
-									"description": "Number of concurrent calls allowed into Ring Group (default is 1). (Regex: /^\\\\d{1,2}$/)",
-									"disabled": true
-								},
-								{
-									"key": "greeting",
-									"value": "",
-									"description": "Ring Group Greeting All greetings must begin with greeting-. (Regex: /^greeting\\\\-([\\\\w\\\\-]+)$/)",
-									"disabled": true
-								},
-								{
-									"key": "ganswer",
-									"value": "",
-									"description": "Perform Answer on undefined greeting (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "timeout_msg",
-									"value": "",
-									"description": "Timeout message. All timeout messages begin with announce-. (Regex: /^announce\\\\-([\\\\w\\\\-]+)$/)",
-									"disabled": true
-								},
-								{
-									"key": "loops",
-									"value": "",
-									"description": "Number of Ring loops (default is 1). (Regex: /^\\\\d{1,2}$/)",
-									"disabled": true
-								},
-								{
-									"key": "timeout",
-									"value": "",
-									"description": "Timeout for Ring Group (default is 30 seconds). (Regex: /^\\\\d{1,8}$/)",
-									"disabled": true
-								},
-								{
-									"key": "overwrite_timeout",
-									"value": "",
-									"description": "Force Ring Group Timeout (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "dial_options",
-									"value": "",
-									"description": "Dial options (default is r). (Regex: /^\\\\w+$/)",
-									"disabled": true
-								},
-								{
-									"key": "store_cdr",
-									"value": "",
-									"description": "Store Unanswered CDRs (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "last_dest",
-									"value": "",
-									"description": "Last Destination. (Regex: /^(yes|no)$/)",
-									"disabled": true
-								},
-								{
-									"key": "last_dest_vm",
-									"value": "",
-									"description": "Last Destination is Voicemail (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "ring_strategy",
-									"value": "",
-									"description": "Ring Strategy. List of available strategies:\n   all (Default)\n   leastrecent\n   round\n   round_memory",
-									"disabled": true
-								},
-								{
-									"key": "custom_ringtone",
-									"value": "",
-									"description": "Custom Ringtone for SIP devices. (Regex: /^\\\\w+$/)",
-									"disabled": true
-								},
-								{
-									"key": "callerid",
-									"value": "",
-									"description": "Replace Caller ID. (Regex: /^[\\\\+\\\\w\\\\s%]+(\\\\s*<[\\\\+%\\\\w]+>)?$/)",
-									"disabled": true
-								},
-								{
-									"key": "record",
-									"value": "",
-									"description": "Record calls (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "record_silent",
-									"value": "",
-									"description": "Silent Recordings (Specify yes or no)",
-									"disabled": true
-								},
-								{
-									"key": "exit_digit",
-									"value": "",
-									"description": "Exit Digit. (Regex: /^\\\\d{1}$/)",
-									"disabled": true
-								},
-								{
-									"key": "exit_ext",
-									"value": "",
-									"description": "Exit Extension. (Regex: /^\\\\d{3}$/)",
-									"disabled": true
-								},
-								{
-									"key": "confirm_calls",
-									"value": "",
-									"description": "Confirm Calls. (Regex: /^(yes|no)$/)",
-									"disabled": true
-								},
-								{
-									"key": "confirm_msg",
-									"value": "",
-									"description": "Confirmation Message. All confirmation messages begin with rg-announce-.",
-									"disabled": true
-								},
-								{
-									"key": "confirm_answered_msg",
-									"value": "",
-									"description": "Call Answered Message. All call answered messages begin with rg-late-announce-.",
-									"disabled": true
-								},
-								{
-									"key": "call_rating_ext",
-									"value": "",
-									"description": "Call Rating Extension. (Regex: /^\\\\d{3}$/)",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Listing Ring Groups",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// Check for 200 OK response",
-									"pm.test('Status code is 200 OK', function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"// Parse the response JSON",
-									"var responseBody = pm.response.json();",
-									"",
-									"// Check if there is an error field in the response",
-									"if ('error' in responseBody) {",
-									"    console.error(\"Test Failed: \" + responseBody.error);",
-									"    pm.test('API Response Error', function () {",
-									"        pm.expect.fail(responseBody.error);",
-									"    });",
-									"} else if (Object.keys(responseBody).length === 0) {",
-									"    console.log(\"There is no Ring Groups for this Server/Tenant!\");",
-									"    pm.test('No Ring Groups!', function () {",
-									"        pm.expect.fail(\"No Ring Groups for this Server/Tenant!\");",
-									"    });",
-									"} else {",
-									"    // Validate the response structure",
-									"    pm.test('Response Validation', function () {",
-									"        pm.expect(responseBody).to.be.an('object');",
-									"        ",
-									"        // Initialize array to store Ring Group IDs",
-									"        var rgIDs = [];",
-									"        ",
-									"        // Loop through Ring Group data",
-									"        for (var ringGroupID in responseBody) {",
-									"            var ringGroupData = responseBody[ringGroupID];",
-									"            ",
-									"            // Validate specific properties for each Ring Group",
-									"            pm.test('Ring Group ' + ringGroupID + ' Data Validation', function () {",
-									"                pm.expect(ringGroupData).to.be.an('object');",
-									"                pm.expect(ringGroupData).to.have.property('name').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('ext').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('destinations').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('last_dest').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('last_dest_vm').that.is.oneOf(['yes', 'no']);",
-									"                ",
-									"            });",
-									"        }",
-									"        ",
-									"    });",
-									"}",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.list&server={{TenantID}}",
-							"protocol": "http",
-							"host": [
-								"{{IP}}"
-							],
-							"path": [
-								"index.php"
-							],
-							"query": [
-								{
-									"key": "apikey",
-									"value": "{{API_Key}}"
-								},
-								{
-									"key": "action",
-									"value": "pbxware.ring_group.list"
-								},
-								{
-									"key": "server",
-									"value": "{{TenantID}}",
-									"description": "Filter Ring Group list by Server/Tenant ID. If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
 								}
 							]
 						}
