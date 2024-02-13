@@ -21204,95 +21204,6 @@
 					"response": []
 				},
 				{
-					"name": "Listing Ring Groups",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// Check for 200 OK response",
-									"pm.test('Status code is 200 OK', function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"// Parse the response JSON",
-									"var responseBody = pm.response.json();",
-									"",
-									"// Check if there is an error field in the response",
-									"if ('error' in responseBody) {",
-									"    console.error(\"Test Failed: \" + responseBody.error);",
-									"    pm.test('API Response Error', function () {",
-									"        pm.expect.fail(responseBody.error);",
-									"    });",
-									"} else if (Object.keys(responseBody).length === 0) {",
-									"    console.log(\"There is no Ring Groups for this Server/Tenant!\");",
-									"    pm.test('No Ring Groups!', function () {",
-									"        pm.expect.fail(\"No Ring Groups for this Server/Tenant!\");",
-									"    });",
-									"} else {",
-									"    // Validate the response structure",
-									"    pm.test('Response Validation', function () {",
-									"        pm.expect(responseBody).to.be.an('object');",
-									"        ",
-									"        // Initialize array to store Ring Group IDs",
-									"        var rgIDs = [];",
-									"        ",
-									"        // Loop through Ring Group data",
-									"        for (var ringGroupID in responseBody) {",
-									"            var ringGroupData = responseBody[ringGroupID];",
-									"            ",
-									"            // Validate specific properties for each Ring Group",
-									"            pm.test('Ring Group ' + ringGroupID + ' Data Validation', function () {",
-									"                pm.expect(ringGroupData).to.be.an('object');",
-									"                pm.expect(ringGroupData).to.have.property('name').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('ext').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('destinations').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('last_dest').that.is.a('string');",
-									"                pm.expect(ringGroupData).to.have.property('last_dest_vm').that.is.oneOf(['yes', 'no']);",
-									"                ",
-									"            });",
-									"        }",
-									"        ",
-									"    });",
-									"}",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.list&server={{TenantID}}",
-							"protocol": "http",
-							"host": [
-								"{{IP}}"
-							],
-							"path": [
-								"index.php"
-							],
-							"query": [
-								{
-									"key": "apikey",
-									"value": "{{API_Key}}"
-								},
-								{
-									"key": "action",
-									"value": "pbxware.ring_group.list"
-								},
-								{
-									"key": "server",
-									"value": "{{TenantID}}",
-									"description": "Filter Ring Group list by Server/Tenant ID. If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Configuration Ring Groups",
 					"event": [
 						{
@@ -21397,6 +21308,95 @@
 									"key": "id",
 									"value": "{{RG_ID}}",
 									"description": "Ring Group ID. (Required)"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listing Ring Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else if (Object.keys(responseBody).length === 0) {",
+									"    console.log(\"There is no Ring Groups for this Server/Tenant!\");",
+									"    pm.test('No Ring Groups!', function () {",
+									"        pm.expect.fail(\"No Ring Groups for this Server/Tenant!\");",
+									"    });",
+									"} else {",
+									"    // Validate the response structure",
+									"    pm.test('Response Validation', function () {",
+									"        pm.expect(responseBody).to.be.an('object');",
+									"        ",
+									"        // Initialize array to store Ring Group IDs",
+									"        var rgIDs = [];",
+									"        ",
+									"        // Loop through Ring Group data",
+									"        for (var ringGroupID in responseBody) {",
+									"            var ringGroupData = responseBody[ringGroupID];",
+									"            ",
+									"            // Validate specific properties for each Ring Group",
+									"            pm.test('Ring Group ' + ringGroupID + ' Data Validation', function () {",
+									"                pm.expect(ringGroupData).to.be.an('object');",
+									"                pm.expect(ringGroupData).to.have.property('name').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('ext').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('destinations').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('last_dest').that.is.a('string');",
+									"                pm.expect(ringGroupData).to.have.property('last_dest_vm').that.is.oneOf(['yes', 'no']);",
+									"                ",
+									"            });",
+									"        }",
+									"        ",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ring_group.list&server={{TenantID}}",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ring_group.list"
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Filter Ring Group list by Server/Tenant ID. If PBXware is running in Tenant Mode this is a required field and must contain a valid Tenant ID. ID 1 is always assigned to Master tenant and cannot be used."
 								}
 							]
 						}
@@ -23961,7 +23961,7 @@
 									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
 									"",
 									"",
-									"        pm.collectionVariables.get(\"ERGsID\", null);",
+									"        pm.collectionVariables.set(\"ERGsID\", null);",
 									"",
 									"    });",
 									"}",
