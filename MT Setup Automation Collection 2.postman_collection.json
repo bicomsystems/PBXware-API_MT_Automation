@@ -515,7 +515,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.tenant.add&tenant_name={{$randomCompanyName}}&tenant_code=900&package={{TenantPackageID}}&ext_length=3&country=135&national=0&international=00",
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.tenant.add&tenant_name={{$randomCompanyName}}&tenant_code=900&package={{TenantPackageID}}&ext_length=3&country=135&national=0&international=00&callgroups=1,2,3,4,5",
 							"protocol": "http",
 							"host": [
 								"{{IP}}"
@@ -797,9 +797,8 @@
 								},
 								{
 									"key": "callgroups",
-									"value": "",
-									"description": "Call groups/Pickup Groups (comma separated). (Regex: /^[0-9]+(,[0-9]+)*$/)",
-									"disabled": true
+									"value": "1,2,3,4,5",
+									"description": "Call groups/Pickup Groups (comma separated). (Regex: /^[0-9]+(,[0-9]+)*$/)"
 								},
 								{
 									"key": "localcodecs",
@@ -6775,6 +6774,1522 @@
 					"response": []
 				},
 				{
+					"name": "Add Extension 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else {",
+									"    // Check if the response contains the expected fields",
+									"    pm.test('Response Validation', function () {",
+									"        pm.expect(responseBody).to.be.an('object');",
+									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
+									"        pm.expect(responseBody).to.have.property('id').that.is.a('string');",
+									"        pm.expect(responseBody).to.have.property('ext').that.is.a('number');",
+									"    });",
+									"",
+									"    pm.collectionVariables.set(\"ExtID4\", responseBody.id);",
+									"",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.add&server={{TenantID}}&name=Ext914&email=ext914@test.com&ext=914&location=2&ua=50&secret=Test123!&pin=1111&prot=sip&status=1&incominglimit=2&outgoinglimit=2&voicemail=1&macaddress=fc5c84414a6f",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}",
+									"description": "API Key"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ext.add",
+									"description": "Action"
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Tenant/Server ID (Required)"
+								},
+								{
+									"key": "name",
+									"value": "Ext914",
+									"description": "Full Name (Required) (Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "email",
+									"value": "ext914@test.com",
+									"description": "E-mail (Required) (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)"
+								},
+								{
+									"key": "ext",
+									"value": "914",
+									"description": "Extension number. (Regex: /^\\\\d{3}$/)"
+								},
+								{
+									"key": "location",
+									"value": "2",
+									"description": "Location (Local=1, Remote=2) (Required)"
+								},
+								{
+									"key": "ua",
+									"value": "50",
+									"description": "User Agent Device ID (number only) (Required) (50 is for Generic SIP)"
+								},
+								{
+									"key": "secret",
+									"value": "Test123!",
+									"description": "Password (Required). (Regex: /^[a-zA-Z0-9%\\\\$\\\\*!@\\\\_\\\\-]+$/)"
+								},
+								{
+									"key": "pin",
+									"value": "1111",
+									"description": "PIN (Required). (Regex: /^\\\\d{4,4}$/)"
+								},
+								{
+									"key": "prot",
+									"value": "sip",
+									"description": "Protocol ('sip' and 'iax' only!) (Required)"
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"description": "Status (Active=1, Not Active=0, Suspended=2) (Required)"
+								},
+								{
+									"key": "incominglimit",
+									"value": "2",
+									"description": "Incoming limit (Required). (Regex: /^\\\\d{1,4}$/)"
+								},
+								{
+									"key": "outgoinglimit",
+									"value": "2",
+									"description": "Outgoing limit (Required). (Regex: /^\\\\d{1,4}$/)"
+								},
+								{
+									"key": "voicemail",
+									"value": "1",
+									"description": "Voicemail (Yes=1, No=0) (Required)"
+								},
+								{
+									"key": "title",
+									"value": "",
+									"description": "Title. (Regex: /^.{1,60}$/)",
+									"disabled": true
+								},
+								{
+									"key": "uad_sipheaders",
+									"value": "",
+									"description": "Check for UAD SIP Headers. (Regex: /[\\\\w\\\\-,]+/)",
+									"disabled": true
+								},
+								{
+									"key": "label",
+									"value": "",
+									"description": "Label. (Regex: /^.{1,60}$/)",
+									"disabled": true
+								},
+								{
+									"key": "user_location",
+									"value": "",
+									"description": "User Location. (Regex: /^.{1,60}$/)",
+									"disabled": true
+								},
+								{
+									"key": "user_language",
+									"value": "",
+									"description": "User lenguage. (Regex: /^.{1,60}$/)",
+									"disabled": true
+								},
+								{
+									"key": "authname",
+									"value": "",
+									"description": "Authentification name. (Regex: /^\\\\w+$/)",
+									"disabled": true
+								},
+								{
+									"key": "auth",
+									"value": "",
+									"description": "(Regex: /^(\\\\S+)(:\\\\S+)?@\\\\S+$/)",
+									"disabled": true
+								},
+								{
+									"key": "billing",
+									"value": "",
+									"description": "Call Rating (Yes=1, No=0) (deprecated and will be soon replaced with call_rating)",
+									"disabled": true
+								},
+								{
+									"key": "call_rating",
+									"value": "",
+									"description": "Call Rating (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "creditlimit",
+									"value": "",
+									"description": "Credit limit (number, 12 digits max, required if Billing=1)",
+									"disabled": true
+								},
+								{
+									"key": "reminderbalance",
+									"value": "",
+									"description": "Reminder balance (number, 5 digits max, required if Billing=1)",
+									"disabled": true
+								},
+								{
+									"key": "service_plan",
+									"value": "",
+									"description": "Service Plan ID (required if Billing=1)",
+									"disabled": true
+								},
+								{
+									"key": "nat",
+									"value": "",
+									"description": "NAT (Yes=1, No=0, Never=2)",
+									"disabled": true
+								},
+								{
+									"key": "canreinvite",
+									"value": "",
+									"description": "SIP Re-INVITE support (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "qualify",
+									"value": "",
+									"description": "Qualify (4 digits max)",
+									"disabled": true
+								},
+								{
+									"key": "ringtime",
+									"value": "",
+									"description": "Ring time seconds (2 digits max). (Regex: /^\\\\d{0,2}$/)",
+									"disabled": true
+								},
+								{
+									"key": "incoming_dialoptions",
+									"value": "",
+									"description": "(Regex: /^[0tTr]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "outgoing_dialoptions",
+									"value": "",
+									"description": "(Regex: /^[tTr]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "autoprovisiong",
+									"value": "",
+									"description": "Auto provisioning (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "dhcp",
+									"value": "",
+									"description": "DHCP (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "staticip",
+									"value": "",
+									"description": "Provisioning Static IP address. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "netmask",
+									"value": "",
+									"description": "Provisioning netmask. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "gateway",
+									"value": "",
+									"description": "Provisioning gateway. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "dns1",
+									"value": "",
+									"description": "Provisioning DNS 1. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "dns2",
+									"value": "",
+									"description": "Provisioning DNS 2. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "macaddress",
+									"value": "fc5c84414a6f",
+									"description": "User Agent device MAC address. (Regex: /^[0-9a-fA-F]{12}$/)"
+								},
+								{
+									"key": "voicemail_timezone",
+									"value": "",
+									"description": "Voicemail timezone (Germany, USA…​). (Regex: /^[\\\\w\\\\s]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "vm_greeting_message",
+									"value": "",
+									"description": "Voicemail Greeting Message (Unavailable=0, Busy=1, None=2)",
+									"disabled": true
+								},
+								{
+									"key": "setcallerid",
+									"value": "",
+									"description": "Set CallerID (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "acodecs",
+									"value": "",
+									"description": "Allowed codecs separated with :: ulaw:alaw:g723.1:g726:g729:gsm:ilbc:speex:lpc10:h261:h263:h263p",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "",
+									"description": "Speakerphone paging header, one of following values are valid:\n(empty) - Custom Header\n2 - Aastra 480i 9112i 9133i\n4 - Polycom’s Default\n5 - Sipura\n6 - Snom phones",
+									"disabled": true
+								},
+								{
+									"key": "page_custom",
+									"value": "",
+									"description": "Custom page header (text). (Regex: /^[\\\\w\\\\s]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "recordcalls",
+									"value": "",
+									"description": "Record calls (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "recordsilent",
+									"value": "",
+									"description": "Silent recording (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "vmailsend",
+									"value": "",
+									"description": "Send E-mail (hints) (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "vmailattach",
+									"value": "",
+									"description": "Attach (hints) (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "vmaildelete",
+									"value": "",
+									"description": "Delete After E-mailing (hints) (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "acc_slave",
+									"value": "1",
+									"description": "Slave (hints) (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "slave_accountcode",
+									"value": "",
+									"description": "Master Account Code. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "send_email",
+									"value": "",
+									"description": "Send E-mail with account details (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "service_plan_date",
+									"value": "",
+									"description": "Service Plan Date (dd-mm-YYYY)",
+									"disabled": true
+								},
+								{
+									"key": "limitenable",
+									"value": "",
+									"description": "Enable Limits (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "limittype",
+									"value": "",
+									"description": "Limit Type (Daily, Monthly)",
+									"disabled": true
+								},
+								{
+									"key": "softlimit",
+									"value": "",
+									"description": "Soft Limit (number, 5 digits max)",
+									"disabled": true
+								},
+								{
+									"key": "hardlimit",
+									"value": "",
+									"description": "Hard Limit (number, 5 digits max)",
+									"disabled": true
+								},
+								{
+									"key": "notification_email",
+									"value": "",
+									"description": "(Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "pbd_pin",
+									"value": "",
+									"description": "PIN Based Device PIN (number, 5 digits)",
+									"disabled": true
+								},
+								{
+									"key": "cf_billing_disable",
+									"value": "",
+									"description": "(deprecated and will be soon replaced with cf_call_rating_disable)",
+									"disabled": true
+								},
+								{
+									"key": "cf_call_rating_disable",
+									"value": "",
+									"description": "Disable Call Rating for Call Forwarding. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "webrtc",
+									"value": "",
+									"description": "(Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "defaultip",
+									"value": "",
+									"description": "(Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "max_contacts",
+									"value": "",
+									"description": "(Regex: /^\\\\d{1,2}$/)",
+									"disabled": true
+								},
+								{
+									"key": "encryption",
+									"value": "",
+									"description": "Encryption (yes,offer)",
+									"disabled": true
+								},
+								{
+									"key": "directrtpsetup",
+									"value": "",
+									"description": "Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "callingpres",
+									"value": "",
+									"description": "CallerID Presentation. (Regex: /^(allowed_not_screened|allowed_passed_screen|allowed_failed_screen|allowed|prohib_not_screened|prohib_passed_screen|prohib_failed_screen|prohib|unavailable)$/)",
+									"disabled": true
+								},
+								{
+									"key": "cid_anon",
+									"value": "",
+									"description": "Hide CallerID for Anonymous calls. Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "ringtoneforlocalcalls",
+									"value": "",
+									"description": "(Regex: /^[a-zA-Z0-9._-]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "ringtonefortransferredcalls",
+									"value": "",
+									"description": "(Regex: /^[a-zA-Z0-9._-]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "cidmatchdid",
+									"value": "",
+									"description": "Only Allow Trunk CallerID within DID range. Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "dropanonymous",
+									"value": "",
+									"description": "Drop Anonymous calls: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "trustrpid",
+									"value": "",
+									"description": "Trust Remote-Party-ID: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "sendrpid",
+									"value": "",
+									"description": "Send Remote-Party-ID. (Regex: /^(rpid|pai)$/)",
+									"disabled": true
+								},
+								{
+									"key": "trust_id_outbound",
+									"value": "",
+									"description": "Send Caller ID in RPID for Anonymous calls: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "rpid_connectedline",
+									"value": "",
+									"description": "Connected Line Updates: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "rpid_update",
+									"value": "",
+									"description": "RPID with SIP UPDATE: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "pai_header",
+									"value": "",
+									"description": "(Regex: /^\\\\w{1,64}$/)",
+									"disabled": true
+								},
+								{
+									"key": "callgroup",
+									"value": "",
+									"description": "(Regex: /^([0-9]|[1-5][0-9]|6[0-3])(,([0-9]|[1-5][0-9]|6[0-3]))*$/)",
+									"disabled": true
+								},
+								{
+									"key": "pickupgroup",
+									"value": "",
+									"description": "(Regex: /^([0-9]|[1-5][0-9]|6[0-3])(,([0-9]|[1-5][0-9]|6[0-3]))*$/)",
+									"disabled": true
+								},
+								{
+									"key": "primary_trunk",
+									"value": "",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "secondary_trunk",
+									"value": "",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "tertiary_trunk",
+									"value": "",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "primary_emerg_trunk",
+									"value": "",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "secondary_emerg_trunk",
+									"value": "",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "tertiary_emerg_trunk",
+									"value": "",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "busylevel",
+									"value": "",
+									"description": "(Regex: /^\\\\d{1,2}$/)",
+									"disabled": true
+								},
+								{
+									"key": "limit_notify_play_sound",
+									"value": "",
+									"description": "Play sound on exceeded limit: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "limit_notify_send_email",
+									"value": "",
+									"description": "Send e-mail on exceeded limit: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "busyvoicemail",
+									"value": "",
+									"description": "Greeting-Mode: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "mailboxes",
+									"value": "",
+									"description": "MWI extensions (comma separated). (Regex: /^[0-9,]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "vmailpager",
+									"value": "",
+									"description": "(Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "vmailskipinst",
+									"value": "",
+									"description": "Skip Instructions: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "vmailsaycid",
+									"value": "",
+									"description": "Say CallerID: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "vmailreview",
+									"value": "",
+									"description": "Allow Review mode: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "vmailoperator",
+									"value": "",
+									"description": "Allow Operator: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "vmailenvelope",
+									"value": "",
+									"description": "Play Envelope message: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "vmailhidefromdir",
+									"value": "",
+									"description": "Hide from directory: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "videosupport",
+									"value": "",
+									"description": "Video Support: Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "autoframing",
+									"value": "",
+									"description": "Auto-Framing (RTP Packetization): Yes=1, No=0, Not Set=2",
+									"disabled": true
+								},
+								{
+									"key": "vmaildelay",
+									"value": "",
+									"description": "Voicemail Delay in sec. (Regex: /^[0-9]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "vmailopext",
+									"value": "",
+									"description": "Operator Extension. (Regex: /^[0-9]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "vmailnrings",
+									"value": "",
+									"description": "Rings to answer. (Regex: /^\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "force_codec",
+									"value": "",
+									"description": "Force codec on outbound trunk channel (ulaw, alaw, g722, opus, g723.1, g726, g726aal2, g729, gsm, ilbc, speex, speex16, speex32)",
+									"disabled": true
+								},
+								{
+									"key": "hd_logout_time",
+									"value": "",
+									"description": "Automatic Logout (Hot Desking). (Regex: /^\\\\d$/)",
+									"disabled": true
+								},
+								{
+									"key": "record_beep_ext",
+									"value": "",
+									"description": "Play Periodic Beep in sec. (Regex: /^\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "pbd_pin",
+									"value": "",
+									"description": "Pin Based Dialing Pin (Must be enabled in license). (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "areacode",
+									"value": "",
+									"description": "(Regex: /^\\\\d{1,3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "busylevel_incoming",
+									"value": "",
+									"description": "Apply Busy Level for Incoming Calls (Yes=1, No=0, Not Set=2)",
+									"disabled": true
+								},
+								{
+									"key": "jbimpl",
+									"value": "",
+									"description": "Jitter Buffer (inherit, disabled, fixed, adaptive)",
+									"disabled": true
+								},
+								{
+									"key": "jbmaxsize",
+									"value": "",
+									"description": "Max length (ms). (Regex: /^\\\\d{1,4}$/)",
+									"disabled": true
+								},
+								{
+									"key": "jbresyncthreshold",
+									"value": "",
+									"description": "Re-sync threshold. (Regex: /^\\\\d{1,5}$/)",
+									"disabled": true
+								},
+								{
+									"key": "jbtargetextra",
+									"value": "",
+									"description": "Target extra: (Regex: /^\\\\d{1,4}$/)",
+									"disabled": true
+								},
+								{
+									"key": "show_in_dir",
+									"value": "",
+									"description": "Show In Directory (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "show_in_app",
+									"value": "",
+									"description": "Show in Desktop/Mobile App (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "additional_config",
+									"value": "",
+									"description": "Additional config. (Regex: /[\\\\s\\\\S]/)",
+									"disabled": true
+								},
+								{
+									"key": "ua_autoprov",
+									"value": "",
+									"description": "UAD Auto Provisioning Template. (Regex: /[\\\\s\\\\S]/)",
+									"disabled": true
+								},
+								{
+									"key": "vmailskippin",
+									"value": "",
+									"description": "(Yes=1, No=0, Not Set=2)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editing Extension 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else {",
+									"    // Check if the response contains the expected fields",
+									"    pm.test('Response Validation', function () {",
+									"        pm.expect(responseBody).to.be.an('object');",
+									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
+									"        pm.expect(responseBody).to.have.property('id').that.is.a('string');",
+									"        pm.expect(responseBody).to.have.property('ext').that.is.a('number');",
+									"    });",
+									"",
+									"    // Print the success message and extension ID from the response",
+									"    console.log(responseBody.success);",
+									"    console.log(\"Extension ID:\", responseBody.id);",
+									"",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.edit&server={{TenantID}}&id={{ExtID4}}&name=NewNameExt4&email=sinisabicom1@gmail.com&ext=915&location=1&ua=127&secret=NewPassword1234!-_!%*&password=Password_-12!%*&pin=9876&prot=iax&status=2&incominglimit=10&outgoinglimit=5&voicemail=1&title=TestExtension&uad_sipheaders=SomeText&label=NewLabel&user_location=Cloud&user_language=English&dtmfmode=inband&authname=admin&auth=admin@admin.com&nat=2&canreinvite=1&qualify=5000&ringtime=20&incoming_dialoptions=Tr&outgoing_dialoptions=t&autoprovisiong=1&dhcp=0&staticip=123.123.123.123&netmask=255.255.0.0&gateway=123.123.123.1&dns1=8.8.8.8&dns2=123.123.123.2&voicemail_timezone=Bosnia and Herzegovina&vm_greeting_message=1&setcallerid=0&acodecs=gsm:alaw:h261&page=4&page_custom=Text123&recordcalls=1&recordsilent=1&vmailsend=1&vmailattach=1&vmaildelete=1&send_email=1&webrtc=1&defaultip=163.20.227.168&max_contacts=10&encryption=yes&directrtpsetup=1&callingpres=allowed_failed_screen&cid_anon=1&ringtoneforlocalcalls=Ringtone1&ringtonefortransferredcalls=Ringtone2&cidmatchdid=1&dropanonymous=0&trustrpid=1&sendrpid=pai&trust_id_outbound=1&rpid_connectedline=0&rpid_update=1&pai_header=Header1&callgroup=3&pickupgroup=1,2,3&primary_trunk={{TrunkID1}}&secondary_trunk={{TrunkID2}}&tertiary_trunk={{TrunkID3}}&primary_emerg_trunk={{TrunkID4}}&secondary_emerg_trunk={{TrunkID2}}&tertiary_emerg_trunk={{TrunkID1}}&override_lcr=1&busylevel=12&limit_notify_play_sound=1&limit_notify_send_email=1&busyvoicemail=1&mailboxes={{ExtNumber2}},{{ExtNumber3}}&vmailpager=neki@email.com&vmailskipinst=1&vmailsaycid=1&vmailreview=1&vmailoperator=0&vmailenvelope=0&vmailhidefromdir=0&videosupport=1&autoframing=1&vmaildelay=15&vmailopext=903&vmailnrings=2&force_codec=opus&hd_logout_time=1&record_beep_ext=20&pbd_pin=98765&areacode=789&busylevel_incoming=2&jbimpl=fixed&jbmaxsize=30&jbresyncthreshold=15&jbtargetextra=1234&show_in_dir=1&show_in_app=1&vmailskippin=0&rating_info_osc=1&disable_fax_for_app=1&disable_my_dialer_for_app=0&app_default_client_phone=softphone",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}",
+									"description": "API Key"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ext.edit"
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Tenant/Server ID (Required)"
+								},
+								{
+									"key": "id",
+									"value": "{{ExtID4}}",
+									"description": "Extension IDs (Required) (Use CSV file ExtensionIDs.csv to edit multiple extensions)"
+								},
+								{
+									"key": "name",
+									"value": "NewNameExt4",
+									"description": "Full Name (Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "email",
+									"value": "sinisabicom1@gmail.com",
+									"description": "E-mail (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)"
+								},
+								{
+									"key": "ext",
+									"value": "915",
+									"description": "Extension number. (Regex: /^\\\\d{3}$/)"
+								},
+								{
+									"key": "location",
+									"value": "1",
+									"description": "Location (Local=1, Remote=2)"
+								},
+								{
+									"key": "ua",
+									"value": "127",
+									"description": "User Agent Device ID (number only) (50 is for Generic SIP)"
+								},
+								{
+									"key": "secret",
+									"value": "NewPassword1234!-_!%*",
+									"description": "Password. (Regex: /^[a-zA-Z0-9%\\\\$\\\\*!@\\\\_\\\\-]+$/)"
+								},
+								{
+									"key": "password",
+									"value": "Password_-12!%*",
+									"description": "User Password. (Regex: /^[a-zA-Z0-9%\\\\$\\\\*!@\\\\_\\\\-]+$/)"
+								},
+								{
+									"key": "pin",
+									"value": "9876",
+									"description": "PIN. (Regex: /^\\\\d{4,4}$/)"
+								},
+								{
+									"key": "prot",
+									"value": "iax",
+									"description": "Protocol ('sip' and 'iax' only!)"
+								},
+								{
+									"key": "status",
+									"value": "2",
+									"description": "Status (Active=1, Not Active=0, Suspended=2)"
+								},
+								{
+									"key": "incominglimit",
+									"value": "10",
+									"description": "Incoming limit. (Regex: /^\\\\d{1,4}$/)"
+								},
+								{
+									"key": "outgoinglimit",
+									"value": "5",
+									"description": "Outgoing limit. (Regex: /^\\\\d{1,4}$/)"
+								},
+								{
+									"key": "voicemail",
+									"value": "1",
+									"description": "Voicemail (Yes=1, No=0)"
+								},
+								{
+									"key": "title",
+									"value": "TestExtension",
+									"description": "Title. (Regex: /^.{1,60}$/)"
+								},
+								{
+									"key": "uad_sipheaders",
+									"value": "SomeText",
+									"description": "Check for UAD SIP Headers. (Regex: /[\\\\w\\\\-,]+/)"
+								},
+								{
+									"key": "label",
+									"value": "NewLabel",
+									"description": "Label. (Regex: /^.{1,60}$/)"
+								},
+								{
+									"key": "user_location",
+									"value": "Cloud",
+									"description": "User Location. (Regex: /^.{1,60}$/)"
+								},
+								{
+									"key": "user_language",
+									"value": "English",
+									"description": "User lenguage. (Regex: /^.{1,60}$/)"
+								},
+								{
+									"key": "department",
+									"value": "",
+									"description": "Department ID. (Regex: /^[\\\\d,]+$/).",
+									"disabled": true
+								},
+								{
+									"key": "dtmfmode",
+									"value": "inband",
+									"description": "DTMF Mode (auto, inband, rfc2833, info)."
+								},
+								{
+									"key": "authname",
+									"value": "admin",
+									"description": "Authentification name. (Regex: /^\\\\w+$/)"
+								},
+								{
+									"key": "auth",
+									"value": "admin@admin.com",
+									"description": "(Regex: /^(\\\\S+)(:\\\\S+)?@\\\\S+$/)"
+								},
+								{
+									"key": "billing",
+									"value": "",
+									"description": "Call Rating (Yes=1, No=0) (deprecated and will be soon replaced with call_rating)",
+									"disabled": true
+								},
+								{
+									"key": "call_rating",
+									"value": "",
+									"description": "Call Rating (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "creditlimit",
+									"value": "",
+									"description": "Credit limit (number, 12 digits max, required if Billing/Call_Rating=1)",
+									"disabled": true
+								},
+								{
+									"key": "reminderbalance",
+									"value": "",
+									"description": "Reminder balance (number, 5 digits max, required if Billing/Call_Rating=1)",
+									"disabled": true
+								},
+								{
+									"key": "service_plan",
+									"value": "",
+									"description": "Service Plan ID (required if Billing/Call_Rating=1)",
+									"disabled": true
+								},
+								{
+									"key": "nat",
+									"value": "2",
+									"description": "NAT (Yes=1, No=0, Never=2)"
+								},
+								{
+									"key": "canreinvite",
+									"value": "1",
+									"description": "SIP Re-INVITE support (Yes=1, No=0)"
+								},
+								{
+									"key": "qualify",
+									"value": "5000",
+									"description": "Qualify (4 digits max)"
+								},
+								{
+									"key": "ringtime",
+									"value": "20",
+									"description": "Ring time seconds (2 digits max). (Regex: /^\\\\d{0,2}$/)"
+								},
+								{
+									"key": "incoming_dialoptions",
+									"value": "Tr",
+									"description": "(Regex: /^[0tTr]+$/)"
+								},
+								{
+									"key": "outgoing_dialoptions",
+									"value": "t",
+									"description": "(Regex: /^[tTr]+$/)"
+								},
+								{
+									"key": "autoprovisiong",
+									"value": "1",
+									"description": "Auto provisioning (Yes=1, No=0)"
+								},
+								{
+									"key": "dhcp",
+									"value": "0",
+									"description": "DHCP (Yes=1, No=0)"
+								},
+								{
+									"key": "staticip",
+									"value": "123.123.123.123",
+									"description": "Provisioning Static IP address. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)"
+								},
+								{
+									"key": "netmask",
+									"value": "255.255.0.0",
+									"description": "Provisioning netmask. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)"
+								},
+								{
+									"key": "gateway",
+									"value": "123.123.123.1",
+									"description": "Provisioning gateway. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)"
+								},
+								{
+									"key": "dns1",
+									"value": "8.8.8.8",
+									"description": "Provisioning DNS 1. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)"
+								},
+								{
+									"key": "dns2",
+									"value": "123.123.123.2",
+									"description": "Provisioning DNS 2. (Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)"
+								},
+								{
+									"key": "macaddress",
+									"value": "fc5c84414a6f",
+									"description": "User Agent device MAC address. (Regex: /^[0-9a-fA-F]{12}$/)",
+									"disabled": true
+								},
+								{
+									"key": "voicemail_timezone",
+									"value": "Bosnia and Herzegovina",
+									"description": "Voicemail timezone (Germany, USA…​). (Regex: /^[\\\\w\\\\s]+$/)"
+								},
+								{
+									"key": "vm_greeting_message",
+									"value": "1",
+									"description": "Voicemail Greeting Message (Unavailable=0, Busy=1, None=2)"
+								},
+								{
+									"key": "setcallerid",
+									"value": "0",
+									"description": "Set CallerID (Yes=1, No=0)"
+								},
+								{
+									"key": "acodecs",
+									"value": "gsm:alaw:h261",
+									"description": "Allowed codecs separated with :: ulaw:alaw:g723.1:g726:g729:gsm:ilbc:speex:lpc10:h261:h263:h263p"
+								},
+								{
+									"key": "page",
+									"value": "4",
+									"description": "Speakerphone paging header, one of following values are valid:\n(empty) - Custom Header\n2 - Aastra 480i 9112i 9133i\n4 - Polycom’s Default\n5 - Sipura\n6 - Snom phones"
+								},
+								{
+									"key": "page_custom",
+									"value": "Text123",
+									"description": "Custom page header (text). (Regex: /^[\\\\w\\\\s]+$/)"
+								},
+								{
+									"key": "recordcalls",
+									"value": "1",
+									"description": "Record calls (Yes=1, No=0)"
+								},
+								{
+									"key": "recordsilent",
+									"value": "1",
+									"description": "Silent recording (Yes=1, No=0)"
+								},
+								{
+									"key": "vmailsend",
+									"value": "1",
+									"description": "Send E-mail (hints) (Yes=1, No=0)"
+								},
+								{
+									"key": "vmailattach",
+									"value": "1",
+									"description": "Attach (hints) (Yes=1, No=0)"
+								},
+								{
+									"key": "vmaildelete",
+									"value": "1",
+									"description": "Delete After E-mailing (hints) (Yes=1, No=0)"
+								},
+								{
+									"key": "acc_slave",
+									"value": "",
+									"description": "Slave (hints) (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "slave_accountcode",
+									"value": "",
+									"description": "Master Account Code. (Regex: /^\\\\d{3}$/)",
+									"disabled": true
+								},
+								{
+									"key": "send_email",
+									"value": "1",
+									"description": "Send E-mail with account details (Yes=1, No=0)"
+								},
+								{
+									"key": "service_plan_date",
+									"value": "",
+									"description": "Service Plan Date (dd-mm-YYYY)",
+									"disabled": true
+								},
+								{
+									"key": "limitenable",
+									"value": "",
+									"description": "Enable Limits (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "limittype",
+									"value": "",
+									"description": "Limit Type (Daily, Monthly)",
+									"disabled": true
+								},
+								{
+									"key": "softlimit",
+									"value": "",
+									"description": "Soft Limit (number, 5 digits max)",
+									"disabled": true
+								},
+								{
+									"key": "hardlimit",
+									"value": "",
+									"description": "Hard Limit (number, 5 digits max)",
+									"disabled": true
+								},
+								{
+									"key": "notification_email",
+									"value": "",
+									"description": "(Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
+									"disabled": true
+								},
+								{
+									"key": "cf_billing_disable",
+									"value": "",
+									"description": "(deprecated and will be soon replaced with cf_call_rating_disable)",
+									"disabled": true
+								},
+								{
+									"key": "cf_call_rating_disable",
+									"value": "",
+									"description": "Disable Call Rating for Call Forwarding. (Regex: /^(1|0|2)$/)",
+									"disabled": true
+								},
+								{
+									"key": "webrtc",
+									"value": "1",
+									"description": "(Regex: /^(1|0|2)$/)"
+								},
+								{
+									"key": "defaultip",
+									"value": "163.20.227.168",
+									"description": "(Regex: /^\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}.\\\\d{1,3}$/)"
+								},
+								{
+									"key": "max_contacts",
+									"value": "10",
+									"description": "(Regex: /^\\\\d{1,2}$/)"
+								},
+								{
+									"key": "encryption",
+									"value": "yes",
+									"description": "Encryption (yes,offer)"
+								},
+								{
+									"key": "directrtpsetup",
+									"value": "1",
+									"description": "Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "callingpres",
+									"value": "allowed_failed_screen",
+									"description": "CallerID Presentation. (Regex: /^(allowed_not_screened|allowed_passed_screen|allowed_failed_screen|allowed|prohib_not_screened|prohib_passed_screen|prohib_failed_screen|prohib|unavailable)$/)"
+								},
+								{
+									"key": "cid_anon",
+									"value": "1",
+									"description": "Hide CallerID for Anonymous calls. Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "ringtoneforlocalcalls",
+									"value": "Ringtone1",
+									"description": "(Regex: /^[a-zA-Z0-9._-]+$/)"
+								},
+								{
+									"key": "ringtonefortransferredcalls",
+									"value": "Ringtone2",
+									"description": "(Regex: /^[a-zA-Z0-9._-]+$/)"
+								},
+								{
+									"key": "cidmatchdid",
+									"value": "1",
+									"description": "Only Allow Trunk CallerID within DID range. Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "dropanonymous",
+									"value": "0",
+									"description": "Drop Anonymous calls: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "trustrpid",
+									"value": "1",
+									"description": "Trust Remote-Party-ID: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "sendrpid",
+									"value": "pai",
+									"description": "Send Remote-Party-ID. (Regex: /^(rpid|pai)$/)"
+								},
+								{
+									"key": "trust_id_outbound",
+									"value": "1",
+									"description": "Send Caller ID in RPID for Anonymous calls: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "rpid_connectedline",
+									"value": "0",
+									"description": "Connected Line Updates: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "rpid_update",
+									"value": "1",
+									"description": "RPID with SIP UPDATE: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "pai_header",
+									"value": "Header1",
+									"description": "(Regex: /^\\\\w{1,64}$/)"
+								},
+								{
+									"key": "callgroup",
+									"value": "3",
+									"description": "(Regex: /^([0-9]|[1-5][0-9]|6[0-3])(,([0-9]|[1-5][0-9]|6[0-3]))*$/)"
+								},
+								{
+									"key": "pickupgroup",
+									"value": "1,2,3",
+									"description": "(Regex: /^([0-9]|[1-5][0-9]|6[0-3])(,([0-9]|[1-5][0-9]|6[0-3]))*$/)"
+								},
+								{
+									"key": "primary_trunk",
+									"value": "{{TrunkID1}}",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "secondary_trunk",
+									"value": "{{TrunkID2}}",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "tertiary_trunk",
+									"value": "{{TrunkID3}}",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "primary_emerg_trunk",
+									"value": "{{TrunkID4}}",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "secondary_emerg_trunk",
+									"value": "{{TrunkID2}}",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "tertiary_emerg_trunk",
+									"value": "{{TrunkID1}}",
+									"description": "(Regex: /^[[:alnum:][:punct:][:space:]]+$/)"
+								},
+								{
+									"key": "override_lcr",
+									"value": "1",
+									"description": "Override LCR (Yes/No/NotSet). (Regex: /^(1|0|2)$/)."
+								},
+								{
+									"key": "busylevel",
+									"value": "12",
+									"description": "(Regex: /^\\\\d{1,2}$/)"
+								},
+								{
+									"key": "limit_notify_play_sound",
+									"value": "1",
+									"description": "Play sound on exceeded limit: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "limit_notify_send_email",
+									"value": "1",
+									"description": "Send e-mail on exceeded limit: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "busyvoicemail",
+									"value": "1",
+									"description": "Greeting-Mode: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "mailboxes",
+									"value": "{{ExtNumber2}},{{ExtNumber3}}",
+									"description": "MWI extensions (comma separated). (Regex: /^[0-9,]+$/)"
+								},
+								{
+									"key": "vmailpager",
+									"value": "neki@email.com",
+									"description": "(Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)"
+								},
+								{
+									"key": "vmailskipinst",
+									"value": "1",
+									"description": "Skip Instructions: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "vmailsaycid",
+									"value": "1",
+									"description": "Say CallerID: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "vmailreview",
+									"value": "1",
+									"description": "Allow Review mode: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "vmailoperator",
+									"value": "0",
+									"description": "Allow Operator: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "vmailenvelope",
+									"value": "0",
+									"description": "Play Envelope message: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "vmailhidefromdir",
+									"value": "0",
+									"description": "Hide from directory: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "videosupport",
+									"value": "1",
+									"description": "Video Support: Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "autoframing",
+									"value": "1",
+									"description": "Auto-Framing (RTP Packetization): Yes=1, No=0, Not Set=2"
+								},
+								{
+									"key": "vmaildelay",
+									"value": "15",
+									"description": "Voicemail Delay in sec. (Regex: /^[0-9]+$/)"
+								},
+								{
+									"key": "vmailopext",
+									"value": "903",
+									"description": "Operator Extension. (Regex: /^[0-9]+$/)"
+								},
+								{
+									"key": "vmailnrings",
+									"value": "2",
+									"description": "Rings to answer. (Regex: /^\\\\d{1,3}$/)"
+								},
+								{
+									"key": "force_codec",
+									"value": "opus",
+									"description": "Force codec on outbound trunk channel (ulaw, alaw, g722, opus, g723.1, g726, g726aal2, g729, gsm, ilbc, speex, speex16, speex32)"
+								},
+								{
+									"key": "hd_logout_time",
+									"value": "1",
+									"description": "Automatic Logout (Hot Desking). (Regex: /^\\\\d$/)"
+								},
+								{
+									"key": "record_beep_ext",
+									"value": "20",
+									"description": "Play Periodic Beep in sec. (Regex: /^\\\\d{1,3}$/)"
+								},
+								{
+									"key": "pbd_pin",
+									"value": "98765",
+									"description": "Pin Based Dialing Pin (Must be enabled in license) (number, 5 digits)"
+								},
+								{
+									"key": "areacode",
+									"value": "789",
+									"description": "(Regex: /^\\\\d{1,3}$/)"
+								},
+								{
+									"key": "busylevel_incoming",
+									"value": "2",
+									"description": "Apply Busy Level for Incoming Calls (Yes=1, No=0, Not Set=2)"
+								},
+								{
+									"key": "jbimpl",
+									"value": "fixed",
+									"description": "Jitter Buffer (inherit, disabled, fixed, adaptive)"
+								},
+								{
+									"key": "jbmaxsize",
+									"value": "30",
+									"description": "Max length (ms). (Regex: /^\\\\d{1,4}$/)"
+								},
+								{
+									"key": "jbresyncthreshold",
+									"value": "15",
+									"description": "Re-sync threshold. (Regex: /^\\\\d{1,5}$/)"
+								},
+								{
+									"key": "jbtargetextra",
+									"value": "1234",
+									"description": "Target extra: (Regex: /^\\\\d{1,4}$/)"
+								},
+								{
+									"key": "show_in_dir",
+									"value": "1",
+									"description": "Show In Directory (Yes=1, No=0)"
+								},
+								{
+									"key": "show_in_app",
+									"value": "1",
+									"description": "Show in Desktop/Mobile App (Yes=1, No=0)"
+								},
+								{
+									"key": "additional_config",
+									"value": "",
+									"description": "Additional config. (Regex: /[\\\\s\\\\S]/)",
+									"disabled": true
+								},
+								{
+									"key": "ua_autoprov",
+									"value": "",
+									"description": "UAD Auto Provisioning Template. (Regex: /[\\\\s\\\\S]/)",
+									"disabled": true
+								},
+								{
+									"key": "vmailskippin",
+									"value": "0",
+									"description": "(Yes=1, No=0, Not Set=2)"
+								},
+								{
+									"key": "rating_info_osc",
+									"value": "1",
+									"description": "Show Call Rating Info in OSC. (Yes=1, No=0)."
+								},
+								{
+									"key": "sso_enabled",
+									"value": "0",
+									"description": "Single Sign-On enabled (Yes=1, No=0)",
+									"disabled": true
+								},
+								{
+									"key": "disable_fax_for_app",
+									"value": "1",
+									"description": "Disable FAX for gloCOM (Yes=1, No=0, NotSet = 2)"
+								},
+								{
+									"key": "disable_my_dialer_for_app",
+									"value": "0",
+									"description": "Disable Personal Dialer for gloCOM (Yes=1, No =0, NotSet = 2)"
+								},
+								{
+									"key": "app_default_client_phone",
+									"value": "softphone",
+									"description": "Default Client Phone. (Regex: /^(|softphone|deskphone)$/)"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Ext List",
 					"event": [
 						{
@@ -6963,6 +8478,207 @@
 									"value": "901",
 									"description": "Note: You cannot supply id and ext at the same time!",
 									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ext4 Configuration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else {",
+									"    // Validate the response structure",
+									"    pm.test('Response Validation', function () {",
+									"        // Check if the response is an object",
+									"        pm.expect(responseBody).to.be.an('object');",
+									"",
+									"        // Iterate over each extension in the response",
+									"        Object.keys(responseBody).forEach(function(extensionId) {",
+									"            pm.test(\"Verify Extension \" + extensionId + \" response fields!\", function () {",
+									"                pm.expect(responseBody[extensionId]).to.be.an('object');",
+									"",
+									"                var extension = responseBody[extensionId];",
+									"",
+									"                // Validate specific properties",
+									"                pm.expect(extension).to.have.property('name').that.eql('NewNameExt4');",
+									"                pm.expect(extension).to.have.property('email').that.eql('sinisabicom1@gmail.com');",
+									"                pm.expect(extension).to.have.property('ext').that.eql('915');",
+									"                pm.expect(extension).to.have.property('pin').that.eql('9876');",
+									"                pm.expect(extension).to.have.property('service_plan').that.eql('0');",
+									"                pm.expect(extension).to.have.property('prot').that.eql('sip');",
+									"                pm.expect(extension).to.have.property('protocol').that.eql('sip');",
+									"                pm.expect(extension).to.have.property('location').that.eql('1');",
+									"                pm.expect(extension).to.have.property('user_language').that.eql('');",
+									"                pm.expect(extension).to.have.property('ua_id').that.eql('127');",
+									"                pm.expect(extension).to.have.property('ua_name').that.eql('glocom');",
+									"                pm.expect(extension).to.have.property('ua_fullname').that.eql('gloCOM');",
+									"                pm.expect(extension).to.have.property('status').that.eql('2');",
+									"                pm.expect(extension).to.have.property('linenum').that.eql('');",
+									"                pm.expect(extension).to.have.property('smuser').that.eql('0');",
+									"                pm.expect(extension).to.have.property('additional_macaddress').that.eql('');",
+									"                pm.expect(extension).to.have.property('options_raw').that.eql('');",
+									"                pm.expect(extension).to.have.property('ua_autoprov').that.eql('');",
+									"                pm.expect(extension).to.have.property('additional_config').that.eql('');",
+									"",
+									"                // Validate options object",
+									"                pm.expect(extension).to.have.property('options').that.is.an('object');",
+									"",
+									"                var options = extension.options;",
+									"",
+									"                pm.expect(options).to.have.property('user_title').that.eql('TestExtension');",
+									"                pm.expect(options).to.have.property('ua').that.eql('127');",
+									"                pm.expect(options).to.have.property('uloc').that.eql('1');",
+									"                pm.expect(options).to.have.property('uad_sipheaders').that.eql('SomeText');",
+									"                pm.expect(options).to.have.property('user_label').that.eql('NewLabel');",
+									"                pm.expect(options).to.have.property('user_location').that.eql('Cloud');",
+									"                pm.expect(options).to.have.property('user_language').that.eql('English');",
+									"                pm.expect(options).to.have.property('type').that.eql('friend');",
+									"                pm.expect(options).to.have.property('dtmfmode').that.eql('inband');",
+									"                pm.expect(options).to.have.property('context').that.eql('t-490');",
+									"                pm.expect(options).to.have.property('show_in_app').that.eql('1');",
+									"                pm.expect(options).to.have.property('disable_fax_for_glocom').that.eql('1');",
+									"                pm.expect(options).to.have.property('app_default_client_phone').that.eql('softphone');",
+									"                pm.expect(options).to.have.property('webrtc').that.eql('1');",
+									"                pm.expect(options).to.have.property('encryption').that.eql('yes');",
+									"                pm.expect(options).to.have.property('nat').that.eql('2');",
+									"                pm.expect(options).to.have.property('canreinvite').that.eql('1');",
+									"                pm.expect(options).to.have.property('directrtpsetup').that.eql('1');",
+									"                pm.expect(options).to.have.property('qualify').that.eql('5000');",
+									"                pm.expect(options).to.have.property('host').that.eql('dynamic');",
+									"                pm.expect(options).to.have.property('defaultip').that.eql('163.20.227.168');",
+									"                pm.expect(options).to.have.property('max_contacts').that.eql('10');",
+									"                //pm.expect(options).to.have.property('user_created').that.eql('2024-04-23 04:17:50');",
+									"                pm.expect(options).to.have.property('rating_info_osc').that.eql('1');",
+									"                pm.expect(options).to.have.property('callerid').that.eql('NewNameExt4 <915>');",
+									"                pm.expect(options).to.have.property('callingpres').that.eql('allowed_failed_screen');",
+									"                pm.expect(options).to.have.property('cid_anon').that.eql('1');",
+									"                pm.expect(options).to.have.property('ringtoneforlocalcalls').that.eql('Ringtone1');",
+									"                pm.expect(options).to.have.property('ringtonefortransferredcalls').that.eql('Ringtone2');",
+									"                pm.expect(options).to.have.property('cidmatchdid').that.eql('1');",
+									"                pm.expect(options).to.have.property('dropanonymous').that.eql('0');",
+									"                pm.expect(options).to.have.property('trustrpid').that.eql('1');",
+									"                pm.expect(options).to.have.property('sendrpid').that.eql('pai');",
+									"                pm.expect(options).to.have.property('trust_id_outbound').that.eql('1');",
+									"                pm.expect(options).to.have.property('rpid_connectedline').that.eql('0');",
+									"                pm.expect(options).to.have.property('rpid_update').that.eql('1');",
+									"                pm.expect(options).to.have.property('pai_var').that.eql('Header1');",
+									"                pm.expect(options).to.have.property('voicemail').that.eql('1');",
+									"                pm.expect(options).to.have.property('busyvoicemail').that.eql('1');",
+									"                pm.expect(options).to.have.property('mailboxes').that.eql('902,903');",
+									"                pm.expect(options).to.have.property('callgroup').that.eql('3');",
+									"                pm.expect(options).to.have.property('pickupgroup').that.eql('1,2,3');",
+									"                pm.expect(options).to.have.property('incominglimit').that.eql('10');",
+									"                pm.expect(options).to.have.property('outgoinglimit').that.eql('5');",
+									"                pm.expect(options).to.have.property('busylevel').that.eql('12');",
+									"                pm.expect(options).to.have.property('username').that.eql('490915');",
+									"                pm.expect(options).to.have.property('authname').that.eql('admin');",
+									"                pm.expect(options).to.have.property('__auth').that.eql('admin@admin.com');",
+									"                pm.expect(options).to.have.property('secret').that.eql('NewPassword1234!-_!%*');",
+									"                pm.expect(options).to.have.property('tfa_expiry_time').that.eql('0');",
+									"                pm.expect(options).to.have.property('tfa_max_inactivity').that.eql('0');",
+									"                pm.expect(options).to.have.property('allow').that.eql(['gsm', 'alaw', 'h261']);",
+									"                pm.expect(options).to.have.property('videosupport').that.eql('1');",
+									"                pm.expect(options).to.have.property('force_codec').that.eql('opus');",
+									"                pm.expect(options).to.have.property('autoframing').that.eql('1');",
+									"                pm.expect(options).to.have.property('jbimpl').that.eql('fixed');",
+									"                pm.expect(options).to.have.property('jbmaxsize').that.eql('30');",
+									"                pm.expect(options).to.have.property('jbresyncthreshold').that.eql('15');",
+									"                pm.expect(options).to.have.property('jbtargetextra').that.eql('1234');",
+									"                pm.expect(options).to.have.property('recordcalls').that.eql('1');",
+									"                pm.expect(options).to.have.property('recordsilent').that.eql('1');",
+									"                pm.expect(options).to.have.property('record_beep_ext').that.eql('20');",
+									"                pm.expect(options).to.have.property('mac').that.eql('fc5c84414a6f');",
+									"                pm.expect(options).to.have.property('dhcp').that.eql('0');",
+									"                pm.expect(options).to.have.property('staticip').that.eql('123.123.123.123');",
+									"                pm.expect(options).to.have.property('netmask').that.eql('255.255.0.0');",
+									"                pm.expect(options).to.have.property('gateway').that.eql('123.123.123.1');",
+									"                pm.expect(options).to.have.property('dns1').that.eql('8.8.8.8');",
+									"                pm.expect(options).to.have.property('dns2').that.eql('123.123.123.2');",
+									"                pm.expect(options).to.have.property('areacode').that.eql('789');",
+									"                pm.expect(options).to.have.property('ringtime').that.eql('20');",
+									"                pm.expect(options).to.have.property('incoming_dialoptions').that.eql('Tr');",
+									"                pm.expect(options).to.have.property('dialoptions').that.eql('t');",
+									"                pm.expect(options).to.have.property('page_header_custom').that.eql('Text123');",
+									"                pm.expect(options).to.have.property('override_lcr').that.eql('1');",
+									"                pm.expect(options).to.have.property('limit_notify_play_sound').that.eql('1');",
+									"                pm.expect(options).to.have.property('limit_notify_send_email').that.eql('1');",
+									"                pm.expect(options).to.have.property('hd_logout_time').that.eql('1');",
+									"                pm.expect(options).to.have.property('pin_based_dialling_pin').that.eql('98765');",
+									"                pm.expect(options).to.have.property('disable_fax_for_app').that.eql('1');",
+									"                pm.expect(options).to.have.property('disable_my_dialer').that.eql('0');",
+									"                pm.expect(options).to.have.property('vmailsend').that.eql('1');",
+									"                pm.expect(options).to.have.property('vmailattach').that.eql('1');",
+									"                pm.expect(options).to.have.property('vmaildelete').that.eql('1');",
+									"                pm.expect(options).to.have.property('voice_tz').that.eql('Bosnia and Herzegovina');",
+									"                pm.expect(options).to.have.property('vm_greeting_message').that.eql('1');",
+									"                pm.expect(options).to.have.property('autoprovisiong').that.eql('1');",
+									"                pm.expect(options).to.have.property('setcallerid').that.eql('0');",
+									"            });",
+									"        });",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.configuration&server={{TenantID}}&ext=915",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ext.configuration"
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Server or tenant ID"
+								},
+								{
+									"key": "id",
+									"value": "{{ExtID4}}",
+									"description": "Extension ID of which we want to get configuration.",
+									"disabled": true
+								},
+								{
+									"key": "ext",
+									"value": "915",
+									"description": "Note: You cannot supply id and ext at the same time!"
 								}
 							]
 						}
@@ -24739,6 +26455,82 @@
 					"response": []
 				},
 				{
+					"name": "Deleting Extension 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check for 200 OK response",
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Parse the response JSON",
+									"var responseBody = pm.response.json();",
+									"",
+									"// Check if there is an error field in the response",
+									"if ('error' in responseBody) {",
+									"    console.error(\"Test Failed: \" + responseBody.error);",
+									"    pm.test('API Response Error', function () {",
+									"        pm.expect.fail(responseBody.error);",
+									"    });",
+									"} else {",
+									"    // Validate success response",
+									"    pm.test('Success Response Validation', function () {",
+									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
+									"    });",
+									"",
+									"",
+									"    pm.collectionVariables.set(\"ExtID4\", null);",
+									"",
+									"    // Print the success message",
+									"    console.log(\"Success: \" + responseBody.success);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.delete&server={{TenantID}}&id={{ExtID4}}",
+							"protocol": "http",
+							"host": [
+								"{{IP}}"
+							],
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "apikey",
+									"value": "{{API_Key}}"
+								},
+								{
+									"key": "action",
+									"value": "pbxware.ext.delete"
+								},
+								{
+									"key": "server",
+									"value": "{{TenantID}}",
+									"description": "Server or Tenant ID"
+								},
+								{
+									"key": "id",
+									"value": "{{ExtID4}}",
+									"description": "IDs of extension that we want to delete. For more extensions just run folder wirh CSV file."
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Deleting Extension 3",
 					"event": [
 						{
@@ -25609,6 +27401,10 @@
 		},
 		{
 			"key": "ExtID3",
+			"value": ""
+		},
+		{
+			"key": "ExtID4",
 			"value": ""
 		},
 		{
