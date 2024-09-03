@@ -515,7 +515,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.tenant.add&tenant_name={{$randomCompanyName}}&tenant_code=900&package={{TenantPackageID}}&ext_length=3&country=135&national=0&international=00&callgroups=1,2,3,4,5",
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.tenant.add&tenant_name={{$randomCompanyName}}&tenant_code=900&package={{TenantPackageID}}&ext_length=3&country=135&national=0&international=00&callgroups=1,2,3,4,5&max_contacts=3",
 							"protocol": "http",
 							"host": [
 								"{{IP}}"
@@ -1081,6 +1081,17 @@
 									"value": "",
 									"description": "(Regex: /^\\\\S.+\\\\S$/)",
 									"disabled": true
+								},
+								{
+									"key": "sso_enforced_tenant",
+									"value": "",
+									"description": "Enable SSO on tenant. (Regex: /^(1|0)$/)",
+									"disabled": true
+								},
+								{
+									"key": "max_contacts",
+									"value": "3",
+									"description": "Maximum Connected Devices. (Regex: /^\\\\d{1,2}$/)"
 								}
 							]
 						}
@@ -1130,7 +1141,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.tenant.edit&server=1&id={{TenantID}}&tenant_name={{$randomCompanyName}}&apusername=admin&appassword=Test123!",
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.tenant.edit&server=1&id={{TenantID}}&status=1&tenant_code=999&country=825&area_code=555&national=1&international=11&glocom_dns_srv_lookup=1&glocomproxy=192.168.192.168&apusername=admin&appassword=Test1234!&defaultserver=1&announcetrunks=1&absolutetimeout=20000&cdrvoicemail=2&faxformat=auto&faxfiletype=2&default_location=2&enabletcalls=0&disabletcid=0&tenantcid=Default Caller ID&tenant_faxcid=Default Fax ID&usedefaultcid=1&usedidcid=1&finde164=0&recordlimit=555&showdirosc=1&recordglobal=1&recordsilent=0&mp3_auto_conv=keep&recordbeep=30&recordformat=gsm&audiolang=English&cpark_timeout=20&limitsound=1&limitemail=1&notifyemail=notify@email.com&leavenational=0&currency=E&currencypos=right&dialed_num_minimum_length=5&pstn_mode=0&callgroups=1,2,3&localcodecs=ulaw&remotecodecs=alaw&networkcodecs=g722&hdcheck=1&hdlockext=5&hdlockdevice=5&hdautologout=1&hdlogoutinactive=1&ringtonelocal=ringtone&hidecallerid=0&allowescallerid=1&enablecnamlookup=0&setcidforgrouphunt=0&cidmatchdid=1&dropanonymous=1&didsaveupdatecid=0&forceunknown=1&hideextnodir=0&custompresencetime=60&usedynfeatures=1&cf_call_rating_disable=1&jbimpl=adaptive&jbmaxsize=3000&jbresyncthreshold=99999&jbtargetextra=8888&allowextipauth=0&voiceskippin=0&email_from=email@from.com&vm_email_from=voicemail@from.com&local_channels=10&remote_channels=10&conferences=10&queues=10&auto_attendants=10&dahdi=10&dids_notify_email=didis_notify@email.com&dids_notify_order=did&es_ambulance=911&es_fire=911&es_police=911&es_notification_email=es_notifiication@email.com&ldap_enabled=1&ldap_local_exts=1&ldap_hotdesking=0&ldap_password=Test1234!&appasword=Password123!&emerg_location_header=Emergency-Header&sso_enforced_tenant=1&max_contacts=10",
 							"protocol": "http",
 							"host": [
 								"{{IP}}"
@@ -1159,20 +1170,19 @@
 								},
 								{
 									"key": "status",
-									"value": "{{TenantStatus}}",
-									"description": "Status (Not Active=0, Active=1, Suspended=2)",
-									"disabled": true
+									"value": "1",
+									"description": "Status (Not Active=0, Active=1, Suspended=2)"
 								},
 								{
 									"key": "tenant_name",
 									"value": "{{$randomCompanyName}}",
-									"description": "Tenant Name (Required). Should be a valid FQDN (Fully Qualified Domain Name). (Regex: /^.+$/)"
+									"description": "Tenant Name (Required). Should be a valid FQDN (Fully Qualified Domain Name). (Regex: /^.+$/)",
+									"disabled": true
 								},
 								{
 									"key": "tenant_code",
-									"value": "{{tenant_code}}",
-									"description": "Unique 3-digit Tenant Code (Required). (Regex: /^\\\\d{3}$/)",
-									"disabled": true
+									"value": "999",
+									"description": "Unique 3-digit Tenant Code (Required). (Regex: /^\\\\d{3}$/)"
 								},
 								{
 									"key": "package",
@@ -1188,39 +1198,33 @@
 								},
 								{
 									"key": "country",
-									"value": "{{Country}}",
-									"description": "Country ID (Required).Can be obtained with route object. (Regex: /^\\\\d{1,10}$/)",
-									"disabled": true
+									"value": "825",
+									"description": "Country ID (Required).Can be obtained with route object. (Regex: /^\\\\d{1,10}$/)"
 								},
 								{
 									"key": "area_code",
-									"value": "",
-									"description": "Area Code. (Regex: /^\\\\d{1,50}$/)",
-									"disabled": true
+									"value": "555",
+									"description": "Area Code. (Regex: /^\\\\d{1,50}$/)"
 								},
 								{
 									"key": "national",
-									"value": "{{NationalCode}}",
-									"description": "National Code (Required). (Regex: /^\\\\d{1,10}$/)",
-									"disabled": true
+									"value": "1",
+									"description": "National Code (Required). (Regex: /^\\\\d{1,10}$/)"
 								},
 								{
 									"key": "international",
-									"value": "{{InternationalCode}}",
-									"description": "International Code (Required). (Regex: /^\\\\d{1,10}$/)",
-									"disabled": true
+									"value": "11",
+									"description": "International Code (Required). (Regex: /^\\\\d{1,10}$/)"
 								},
 								{
 									"key": "glocom_dns_srv_lookup",
-									"value": "",
-									"description": "gloCOM Use DNS SRV Lookup. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "gloCOM Use DNS SRV Lookup. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "glocomproxy",
-									"value": "",
-									"description": "gloCOM SIP Proxy. (Regex: /^.+$/)",
-									"disabled": true
+									"value": "192.168.192.168",
+									"description": "gloCOM SIP Proxy. (Regex: /^.+$/)"
 								},
 								{
 									"key": "apusername",
@@ -1229,146 +1233,123 @@
 								},
 								{
 									"key": "appassword",
-									"value": "Test123!",
+									"value": "Test1234!",
 									"description": "HTTP password. (Regex: /^\\\\S.+\\\\S$/)"
 								},
 								{
 									"key": "defaultserver",
-									"value": "",
-									"description": "Default Server. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Default Server. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "announcetrunks",
-									"value": "",
-									"description": "Announce Trunks. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Announce Trunks. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "absolutetimeout",
-									"value": "",
-									"description": "Absolute Timeout in sec. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "20000",
+									"description": "Absolute Timeout in sec. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "cdrvoicemail",
-									"value": "",
-									"description": "Voicemail in CDRs\n2: As Voicemail\n1: As Not Answered calls\n0: As Answered calls\n(Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "2",
+									"description": "Voicemail in CDRs\n2: As Voicemail\n1: As Not Answered calls\n0: As Answered calls\n(Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "faxformat",
-									"value": "",
-									"description": "FAX page format\n-letter\n-legal\n-A4\n-auto",
-									"disabled": true
+									"value": "auto",
+									"description": "FAX page format\n-letter\n-legal\n-A4\n-auto"
 								},
 								{
 									"key": "faxfiletype",
-									"value": "",
-									"description": "FAX file type\n1: Both PDF and TIFF\n2: Only PDF\n3: Only TIFF",
-									"disabled": true
+									"value": "2",
+									"description": "FAX file type\n1: Both PDF and TIFF\n2: Only PDF\n3: Only TIFF"
 								},
 								{
 									"key": "default_location",
-									"value": "",
-									"description": "Default Extension Location (Local=1, Remote=2)",
-									"disabled": true
+									"value": "2",
+									"description": "Default Extension Location (Local=1, Remote=2)"
 								},
 								{
 									"key": "enabletcalls",
-									"value": "",
-									"description": "Enable Tenant to Tenant calls. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Enable Tenant to Tenant calls. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "disabletcid",
-									"value": "",
-									"description": "Disable CallerID rewrite for tenant to tenant calls. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Disable CallerID rewrite for tenant to tenant calls. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "tenantcid",
-									"value": "",
-									"description": "Default CallerID. (Regex: /^.+$/)",
-									"disabled": true
+									"value": "Default Caller ID",
+									"description": "Default CallerID. (Regex: /^.+$/)"
 								},
 								{
 									"key": "tenant_faxcid",
-									"value": "",
-									"description": "Default Fax CallerID. (Regex: /^.+$/)",
-									"disabled": true
+									"value": "Default Fax ID",
+									"description": "Default Fax CallerID. (Regex: /^.+$/)"
 								},
 								{
 									"key": "usedefaultcid",
-									"value": "",
-									"description": "Use Default CallerID for tenant to tenant calls. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Use Default CallerID for tenant to tenant calls. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "usedidcid",
-									"value": "",
-									"description": "Use DIDs as CallerID for tenant to tenant calls. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Use DIDs as CallerID for tenant to tenant calls. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "finde164",
-									"value": "",
-									"description": "Find E.164 numbers in DIDs. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Find E.164 numbers in DIDs. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "recordlimit",
-									"value": "",
-									"description": "Number of objects per page (Default: 10). (Regex: /^\\\\d{1,3}$/)",
-									"disabled": true
+									"value": "555",
+									"description": "Number of objects per page (Default: 10). (Regex: /^\\\\d{1,3}$/)"
 								},
 								{
 									"key": "showdirosc",
-									"value": "",
-									"description": "Show Directory in OSC. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Show Directory in OSC. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "recordglobal",
-									"value": "",
-									"description": "Record calls by default. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Record calls by default. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "recordsilent",
-									"value": "",
-									"description": "Silent recording by default. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Silent recording by default. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "mp3_auto_conv",
-									"value": "",
-									"description": "Convert recordings to mp3 on generation. (Regex: /^(yes|keep|no)$/)",
-									"disabled": true
+									"value": "keep",
+									"description": "Convert recordings to mp3 on generation. (Regex: /^(yes|keep|no)$/)"
 								},
 								{
 									"key": "recordbeep",
-									"value": "",
-									"description": "Play Periodic Beep in sec. (Regex: /^\\\\d{1,3}$/)",
-									"disabled": true
+									"value": "30",
+									"description": "Play Periodic Beep in sec. (Regex: /^\\\\d{1,3}$/)"
 								},
 								{
 									"key": "recordformat",
-									"value": "",
-									"description": "Recordings format\n-gsm: GSM\n-wav: WAV\n-wav49: WAV49\n-g729: G729 native → GSM\n-ogg: OGG",
-									"disabled": true
+									"value": "gsm",
+									"description": "Recordings format\n-gsm: GSM\n-wav: WAV\n-wav49: WAV49\n-g729: G729 native → GSM\n-ogg: OGG"
 								},
 								{
 									"key": "audiolang",
-									"value": "",
-									"description": "Audio Language. (Regex: /^.+$/)",
-									"disabled": true
+									"value": "English",
+									"description": "Audio Language. (Regex: /^.+$/)"
 								},
 								{
 									"key": "cpark_timeout",
-									"value": "",
-									"description": "Enhanced Call Parking Timeout (sec). (Regex: /^\\\\d{1,3}$/)",
-									"disabled": true
+									"value": "20",
+									"description": "Enhanced Call Parking Timeout (sec). (Regex: /^\\\\d{1,3}$/)"
 								},
 								{
 									"key": "cpark_dial",
@@ -1384,177 +1365,148 @@
 								},
 								{
 									"key": "limitsound",
-									"value": "",
-									"description": "Play Sound. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Play Sound. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "limitemail",
-									"value": "",
-									"description": "Enable send email option. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Enable send email option. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "notifyemail",
-									"value": "",
-									"description": "Notification email. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
-									"disabled": true
+									"value": "notify@email.com",
+									"description": "Notification email. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)"
 								},
 								{
 									"key": "leavenational",
-									"value": "",
-									"description": "Leave National Code. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Leave National Code. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "currency",
-									"value": "",
-									"description": "Currency symbol/ISO code. (Regex: /^.{1,3}$/)",
-									"disabled": true
+									"value": "E",
+									"description": "Currency symbol/ISO code. (Regex: /^.{1,3}$/)"
 								},
 								{
 									"key": "currencypos",
-									"value": "",
-									"description": "Currency writing convention\nleft: Symbol before amount\nright: Symbol after amount.\n(Regex: /^(left|right)$/)",
-									"disabled": true
+									"value": "right",
+									"description": "Currency writing convention\nleft: Symbol before amount\nright: Symbol after amount.\n(Regex: /^(left|right)$/)"
 								},
 								{
 									"key": "dialed_num_minimum_length",
-									"value": "",
-									"description": "Dialed number minimum length. (Regex: /^\\\\d{1,4}$/)",
-									"disabled": true
+									"value": "5",
+									"description": "Dialed number minimum length. (Regex: /^\\\\d{1,4}$/)"
 								},
 								{
 									"key": "pstn_mode",
-									"value": "",
-									"description": "PSTN numbering mode. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "PSTN numbering mode. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "callgroups",
-									"value": "",
-									"description": "Call groups/Pickup Groups (comma separated). (Regex: /^[0-9]+(,[0-9]+)*$/)",
-									"disabled": true
+									"value": "1,2,3",
+									"description": "Call groups/Pickup Groups (comma separated). (Regex: /^[0-9]+(,[0-9]+)*$/)"
 								},
 								{
 									"key": "localcodecs",
-									"value": "",
-									"description": "Local Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/)",
-									"disabled": true
+									"value": "ulaw",
+									"description": "Local Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/)"
 								},
 								{
 									"key": "remotecodecs",
-									"value": "",
-									"description": "Remote Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/).\"",
-									"disabled": true
+									"value": "alaw",
+									"description": "Remote Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/).\""
 								},
 								{
 									"key": "networkcodecs",
-									"value": "",
-									"description": "Network Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/).\"",
-									"disabled": true
+									"value": "g722",
+									"description": "Network Codecs. (Regex: /^(:|ulaw|alaw|g722|opus|g723.1|g726|g726aal2|g729|gsm|ilbc|speex|speex16|speex32|lpc10|h261|h263|h263p|h264)+$/).\""
 								},
 								{
 									"key": "hdcheck",
-									"value": "",
-									"description": "Login Attempts Check. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Login Attempts Check. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "hdlockext",
-									"value": "",
-									"description": "Lock Extension After X Failed Attempts.  (Regex: /^\\\\d{1}$/)",
-									"disabled": true
+									"value": "5",
+									"description": "Lock Extension After X Failed Attempts.  (Regex: /^\\\\d{1}$/)"
 								},
 								{
 									"key": "hdlockdevice",
-									"value": "",
-									"description": "Lock Phone After X Locked Extensions.  (Regex: /^\\\\d{1}$/)",
-									"disabled": true
+									"value": "5",
+									"description": "Lock Phone After X Locked Extensions.  (Regex: /^\\\\d{1}$/)"
 								},
 								{
 									"key": "hdautologout",
-									"value": "",
-									"description": "Automatic Log Out. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Automatic Log Out. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "hdlogoutinactive",
-									"value": "",
-									"description": "Log Out After X Hours of Inactivity. (Regex: /^\\\\d{1}$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Log Out After X Hours of Inactivity. (Regex: /^\\\\d{1}$/)"
 								},
 								{
 									"key": "ringtonelocal",
-									"value": "",
-									"description": "Ringtone for Local calls. (Regex: /^.+$/)",
-									"disabled": true
+									"value": "ringtone",
+									"description": "Ringtone for Local calls. (Regex: /^.+$/)"
 								},
 								{
 									"key": "hidecallerid",
-									"value": "",
-									"description": "Hide CallerID in OSC. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Hide CallerID in OSC. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "allowescallerid",
-									"value": "",
-									"description": "Allow ES CallerID\" for Call Forwarding. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Allow ES CallerID\" for Call Forwarding. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "enablecnamlookup",
-									"value": "",
-									"description": "Enable CallerID CNAM lookup. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Enable CallerID CNAM lookup. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "setcidforgrouphunt",
-									"value": "",
-									"description": "Set CallerID for Group Hunt calls. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Set CallerID for Group Hunt calls. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "cidmatchdid",
-									"value": "",
-									"description": "Only Allow Trunk CallerID within DID range. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Only Allow Trunk CallerID within DID range. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "dropanonymous",
-									"value": "",
-									"description": "Drop Anonymous calls. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Drop Anonymous calls. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "didsaveupdatecid",
-									"value": "",
-									"description": "On DID save update ES/CID/Trunks. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "On DID save update ES/CID/Trunks. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "forceunknown",
-									"value": "",
-									"description": "Do not allow users sending any CallerID. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Do not allow users sending any CallerID. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "hideextnodir",
-									"value": "",
-									"description": "Hide Extensions with no department (gloCOM). (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "0",
+									"description": "Hide Extensions with no department (gloCOM). (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "custompresencetime",
-									"value": "",
-									"description": "gloCOM presence offline delay (min). (Regex: /^\\\\d{1,4}$/)",
-									"disabled": true
+									"value": "60",
+									"description": "gloCOM presence offline delay (min). (Regex: /^\\\\d{1,4}$/)"
 								},
 								{
 									"key": "usedynfeatures",
-									"value": "",
-									"description": "Use Dynamic Features. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Use Dynamic Features. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "nobillingfwd",
@@ -1564,165 +1516,147 @@
 								},
 								{
 									"key": "cf_call_rating_disable",
-									"value": "",
-									"description": "Disable Call Rating for Call Forwarding. (Regex: /^(1|0|2)$/)",
-									"disabled": true
+									"value": "1",
+									"description": "Disable Call Rating for Call Forwarding. (Regex: /^(1|0|2)$/)"
 								},
 								{
 									"key": "jbimpl",
-									"value": "",
-									"description": "Jitter Buffer (inherit, disabled, fixed, adaptive)",
-									"disabled": true
+									"value": "adaptive",
+									"description": "Jitter Buffer (inherit, disabled, fixed, adaptive)"
 								},
 								{
 									"key": "jbmaxsize",
-									"value": "",
-									"description": "Max length (ms). (Regex: /^\\\\d{1,4}$/)",
-									"disabled": true
+									"value": "3000",
+									"description": "Max length (ms). (Regex: /^\\\\d{1,4}$/)"
 								},
 								{
 									"key": "jbresyncthreshold",
-									"value": "",
-									"description": "Re-sync threshold. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "99999",
+									"description": "Re-sync threshold. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "jbtargetextra",
-									"value": "",
-									"description": "Target extra. (Regex: /^\\\\d{1,4}$/)",
-									"disabled": true
+									"value": "8888",
+									"description": "Target extra. (Regex: /^\\\\d{1,4}$/)"
 								},
 								{
 									"key": "allowextipauth",
-									"value": "",
-									"description": "Allow IP Address Authentication for Extensions (Yes=1, No=0). (Regex: /^(1|0|2)$/).",
-									"disabled": true
+									"value": "0",
+									"description": "Allow IP Address Authentication for Extensions (Yes=1, No=0). (Regex: /^(1|0|2)$/)."
 								},
 								{
 									"key": "voiceskippin",
-									"value": "",
-									"description": "Skip Voicemail PIN Prompt (Yes=1, No=0)",
-									"disabled": true
+									"value": "0",
+									"description": "Skip Voicemail PIN Prompt (Yes=1, No=0)"
 								},
 								{
 									"key": "email_from",
-									"value": "",
-									"description": "From E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
-									"disabled": true
+									"value": "email@from.com",
+									"description": "From E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)"
 								},
 								{
 									"key": "vm_email_from",
-									"value": "",
-									"description": "Voicemail From E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
-									"disabled": true
+									"value": "voicemail@from.com",
+									"description": "Voicemail From E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)"
 								},
 								{
 									"key": "local_channels",
-									"value": "",
-									"description": "Local Channels. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "10",
+									"description": "Local Channels. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "remote_channels",
-									"value": "",
-									"description": "Remote Channels. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "10",
+									"description": "Remote Channels. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "conferences",
-									"value": "",
-									"description": "Conferences. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "10",
+									"description": "Conferences. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "queues",
-									"value": "",
-									"description": "Queues. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "10",
+									"description": "Queues. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "auto_attendants",
-									"value": "",
-									"description": "Auto Attendants. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "10",
+									"description": "Auto Attendants. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "dahdi",
-									"value": "",
-									"description": "DAHDI. (Regex: /^\\\\d{1,5}$/)",
-									"disabled": true
+									"value": "10",
+									"description": "DAHDI. (Regex: /^\\\\d{1,5}$/)"
 								},
 								{
 									"key": "dids_notify_email",
-									"value": "",
-									"description": "Notification E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)",
-									"disabled": true
+									"value": "didis_notify@email.com",
+									"description": "Notification E-mail. (Regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]+$/)"
 								},
 								{
 									"key": "dids_notify_order",
-									"value": "",
-									"description": "Order By. (Regex: /^(did|date)$/)",
-									"disabled": true
+									"value": "did",
+									"description": "Order By. (Regex: /^(did|date)$/)"
 								},
 								{
 									"key": "es_ambulance",
-									"value": "",
-									"description": "Ambulance. (Regex: /^\\\\d{3,16}$/)",
-									"disabled": true
+									"value": "911",
+									"description": "Ambulance. (Regex: /^\\\\d{3,16}$/)"
 								},
 								{
 									"key": "es_fire",
-									"value": "",
-									"description": "Fire. (Regex: /^\\\\d{3,16}$/)",
-									"disabled": true
+									"value": "911",
+									"description": "Fire. (Regex: /^\\\\d{3,16}$/)"
 								},
 								{
 									"key": "es_police",
-									"value": "",
-									"description": "Police. (Regex: /^\\\\d{3,16}$/)",
-									"disabled": true
+									"value": "911",
+									"description": "Police. (Regex: /^\\\\d{3,16}$/)"
 								},
 								{
 									"key": "es_notification_email",
-									"value": "",
-									"description": "Notification E-mail. (Regex: /^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,30};?)+$/)",
-									"disabled": true
+									"value": "es_notifiication@email.com",
+									"description": "Notification E-mail. (Regex: /^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,30};?)+$/)"
 								},
 								{
 									"key": "ldap_enabled",
-									"value": "",
-									"description": "Enable LDAP (Yes=1, No=0)",
-									"disabled": true
+									"value": "1",
+									"description": "Enable LDAP (Yes=1, No=0)"
 								},
 								{
 									"key": "ldap_local_exts",
-									"value": "",
-									"description": "Include System Extensions:(Yes=1, No=0, Not set='')",
-									"disabled": true
+									"value": "1",
+									"description": "Include System Extensions:(Yes=1, No=0, Not set='')"
 								},
 								{
 									"key": "ldap_hotdesking",
-									"value": "",
-									"description": "Enable LDAP For Hot Desking Devices:(Yes=1, No=0, Not set='')",
-									"disabled": true
+									"value": "0",
+									"description": "Enable LDAP For Hot Desking Devices:(Yes=1, No=0, Not set='')"
 								},
 								{
 									"key": "ldap_password",
-									"value": "",
-									"description": "LDAP password. (Regex: /^.+$/)",
-									"disabled": true
+									"value": "Test1234!",
+									"description": "LDAP password. (Regex: /^.+$/)"
 								},
 								{
 									"key": "appasword",
-									"value": "",
-									"description": "(Regex: /^\\\\S.+\\\\S$/)",
-									"disabled": true
+									"value": "Password123!",
+									"description": "(Regex: /^\\\\S.+\\\\S$/)"
 								},
 								{
 									"key": "emerg_location_header",
-									"value": "",
-									"description": "Emergency Location Header. (Regex: /^[\\\\w\\\\-,]{1,100}$/)",
-									"disabled": true
+									"value": "Emergency-Header",
+									"description": "Emergency Location Header. (Regex: /^[\\\\w\\\\-,]{1,100}$/)"
+								},
+								{
+									"key": "sso_enforced_tenant",
+									"value": "1",
+									"description": "Enable SSO on tenant. (Regex: /^(1|0)$/)"
+								},
+								{
+									"key": "max_contacts",
+									"value": "10"
 								}
 							]
 						}
@@ -1844,11 +1778,94 @@
 									"        pm.expect(responseBody).to.have.property('tenantcode').that.is.a('string');",
 									"        pm.expect(responseBody).to.have.property('package_id').that.is.a('string');",
 									"",
+									"        // Validate each field with the expected exact values",
+									"        //pm.expect(responseBody.server_name).to.eql(\"Tenant_450\");",
+									"        pm.expect(responseBody.tenantcode).to.eql(\"900\");",
+									"        //pm.expect(responseBody.package_id).to.eql(\"1\");",
+									"        pm.expect(responseBody.glocom_dns_srv_lookup).to.eql(\"yes\");",
+									"        pm.expect(responseBody.glocomproxy).to.eql(\"192.168.192.168\");",
+									"        pm.expect(responseBody.absolutetimeout).to.eql(\"20000\");",
+									"        pm.expect(responseBody.cdrvoicemail).to.eql(\"2\");",
+									"        pm.expect(responseBody.faxformat).to.eql(\"auto\");",
+									"        pm.expect(responseBody.faxfiletype).to.eql(\"2\");",
+									"        pm.expect(responseBody.status).to.eql(\"active\");",
+									"        pm.expect(responseBody.default_location).to.eql(\"2\");",
+									"        pm.expect(responseBody.recordbeep).to.eql(\"30\");",
+									"        pm.expect(responseBody.recordformat).to.eql(\"gsm\");",
+									"        pm.expect(responseBody.ringtonelocal).to.eql(\"ringtone\");",
+									"        pm.expect(responseBody.didsaveupdatecid).to.be.null;",
+									"        pm.expect(responseBody.enabletcalls).to.eql(\"no\");",
+									"        pm.expect(responseBody.tenantcid).to.eql(\"Default Caller ID\");",
+									"        pm.expect(responseBody.tenant_faxcid).to.eql(\"Default Fax ID\");",
+									"        pm.expect(responseBody.recordlimit).to.eql(\"555\");",
+									"        pm.expect(responseBody.country).to.eql(\"825\");",
+									"        pm.expect(responseBody.area_code).to.eql(\"555\");",
+									"        pm.expect(responseBody.national).to.eql(\"1\");",
+									"        pm.expect(responseBody.international).to.eql(\"11\");",
+									"        pm.expect(responseBody.es_ambulance).to.eql(\"911\");",
+									"        pm.expect(responseBody.es_fire).to.eql(\"911\");",
+									"        pm.expect(responseBody.es_police).to.eql(\"911\");",
+									"        pm.expect(responseBody.es_notification_email).to.eql(\"es_notifiication@email.com\");",
+									"        pm.expect(responseBody.emergency_callerid_tenant).to.be.null;",
+									"        pm.expect(responseBody.audiolang).to.eql(\"English\");",
+									"        pm.expect(responseBody.apusername).to.eql(\"admin\");",
+									"        pm.expect(responseBody.appassword).to.eql(\"Test1234!\");",
+									"        pm.expect(responseBody.incominglimit).to.eql(\"10\");",
+									"        pm.expect(responseBody.outgoinglimit).to.eql(\"10\");",
+									"        pm.expect(responseBody.conch).to.eql(\"10\");",
+									"        pm.expect(responseBody.quech).to.eql(\"10\");",
+									"        pm.expect(responseBody.ergch).to.eql(\"8\");",
+									"        pm.expect(responseBody.aach).to.eql(\"10\");",
+									"        pm.expect(responseBody.zapch).to.eql(\"10\");",
+									"        pm.expect(responseBody.notifyemail).to.eql(\"notify@email.com\");",
+									"        pm.expect(responseBody.cpark_timeout).to.eql(\"20\");",
+									"        pm.expect(responseBody.cpark_dial).to.be.null;",
+									"        pm.expect(responseBody.cpark_goto).to.be.null;",
+									"        pm.expect(responseBody.hdlockext).to.eql(\"5\");",
+									"        pm.expect(responseBody.hdlockdevice).to.eql(\"5\");",
+									"        pm.expect(responseBody.hdlogoutinactive).to.eql(\"1\");",
+									"        pm.expect(responseBody.custompresencetime).to.eql(\"60\");",
+									"        pm.expect(responseBody.dialed_num_minimum_length).to.eql(\"5\");",
+									"        pm.expect(responseBody.emerg_location_header).to.eql(\"Emergency-Header\");",
+									"        pm.expect(responseBody.max_contacts).to.eql(\"10\");",
+									"        pm.expect(responseBody.announcetrunks).to.eql(\"1\");",
+									"        pm.expect(responseBody.recordglobal).to.eql(\"1\");",
+									"        pm.expect(responseBody.recordsilent).to.eql(\"0\");",
+									"        pm.expect(responseBody.hidecallerid).to.eql(\"0\");",
+									"        pm.expect(responseBody.allowescallerid).to.eql(\"1\");",
+									"        pm.expect(responseBody.enablecnamlookup).to.eql(\"0\");",
+									"        pm.expect(responseBody.setcidforgrouphunt).to.eql(\"0\");",
+									"        pm.expect(responseBody.cidmatchdid).to.eql(\"1\");",
+									"        pm.expect(responseBody.dropanonymous).to.eql(\"1\");",
+									"        pm.expect(responseBody.forceunknown).to.eql(\"1\");",
+									"        pm.expect(responseBody.hideextnodir).to.eql(\"0\");",
+									"        pm.expect(responseBody.usedynfeatures).to.eql(\"1\");",
+									"        pm.expect(responseBody.nobillingfwd).to.eql(\"1\");",
+									"        pm.expect(responseBody.cf_call_rating_disable).to.eql(\"1\");",
+									"        pm.expect(responseBody.allowextipauth).to.eql(\"0\");",
+									"        pm.expect(responseBody.voiceskippin).to.eql(\"0\");",
+									"        pm.expect(responseBody.usedefaultcid).to.eql(\"1\");",
+									"        pm.expect(responseBody.usedidcid).to.eql(\"1\");",
+									"        pm.expect(responseBody.finde164).to.eql(\"0\");",
+									"        pm.expect(responseBody.showdirosc).to.eql(\"1\");",
+									"        pm.expect(responseBody.leavenational).to.eql(\"0\");",
+									"        pm.expect(responseBody.limitsound).to.eql(\"1\");",
+									"        pm.expect(responseBody.limitemail).to.eql(\"1\");",
+									"        pm.expect(responseBody.pstn_mode).to.eql(\"0\");",
+									"        pm.expect(responseBody.hdcheck).to.eql(\"1\");",
+									"        pm.expect(responseBody.hdautologout).to.eql(\"0\");",
+									"",
+									"        // Validate codec arrays",
+									"        pm.expect(responseBody.local_codecs).to.be.an('array').that.includes(\"ulaw\");",
+									"        pm.expect(responseBody.remote_codecs).to.be.an('array').that.includes(\"alaw\");",
+									"        pm.expect(responseBody.network_codecs).to.be.an('array').that.includes(\"g722\");",
+									"",
 									"    });",
 									"}",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -6746,7 +6763,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.add&server={{TenantID}}&name=Ext914&email=ext914@test.com&ext=914&location=2&ua=50&secret=Test123!&pin=1111&prot=sip&status=1&incominglimit=2&outgoinglimit=2&voicemail=1&macaddress=fc5c84414a6f",
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.add&server={{TenantID}}&name=Ext914&email=ext914@test.com&ext=914&location=2&ua=50&secret=Test123!&pin=1111&prot=sip&status=1&incominglimit=2&outgoinglimit=2&voicemail=1&macaddress=fc5c84414a6f&sso_enabled=1&disable_fax_for_app=0&disable_my_dialer_for_app=1&app_default_client_phone=deskphone",
 							"protocol": "http",
 							"host": [
 								"{{IP}}"
@@ -7464,6 +7481,32 @@
 									"value": "",
 									"description": "(Yes=1, No=0, Not Set=2)",
 									"disabled": true
+								},
+								{
+									"key": "rating_info_osc",
+									"value": "",
+									"description": "Show Call Rating Info in OSC. (Yes=1, No=0).",
+									"disabled": true
+								},
+								{
+									"key": "sso_enabled",
+									"value": "1",
+									"description": "Single Sign-On enabled (Yes=1, No=0)"
+								},
+								{
+									"key": "disable_fax_for_app",
+									"value": "0",
+									"description": "Disable FAX for gloCOM (Yes=1, No=0, NotSet = 2)"
+								},
+								{
+									"key": "disable_my_dialer_for_app",
+									"value": "1",
+									"description": "Disable Personal Dialer for gloCOM (Yes=1, No =0, NotSet = 2)"
+								},
+								{
+									"key": "app_default_client_phone",
+									"value": "deskphone",
+									"description": "Default Client Phone. (Regex: /^(|softphone|deskphone)$/)"
 								}
 							]
 						}
@@ -7526,7 +7569,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.edit&server={{TenantID}}&id={{ExtID4}}&name=NewNameExt4&email=sinisabicom1@gmail.com&ext=915&location=1&ua=127&secret=NewPassword1234!-_!%*&password=Password_-12!%*&pin=9876&prot=iax&status=2&incominglimit=10&outgoinglimit=5&voicemail=1&title=TestExtension&uad_sipheaders=SomeText&label=NewLabel&user_location=Cloud&user_language=English&dtmfmode=inband&authname=admin&auth=admin@admin.com&nat=2&canreinvite=1&qualify=5000&ringtime=20&incoming_dialoptions=Tr&outgoing_dialoptions=t&autoprovisiong=1&dhcp=0&staticip=123.123.123.123&netmask=255.255.0.0&gateway=123.123.123.1&dns1=8.8.8.8&dns2=123.123.123.2&voicemail_timezone=Bosnia and Herzegovina&vm_greeting_message=1&setcallerid=0&acodecs=gsm:alaw:h261&page=4&page_custom=Text123&recordcalls=1&recordsilent=1&vmailsend=1&vmailattach=1&vmaildelete=1&send_email=1&webrtc=1&defaultip=163.20.227.168&max_contacts=10&encryption=yes&directrtpsetup=1&callingpres=allowed_failed_screen&cid_anon=1&ringtoneforlocalcalls=Ringtone1&ringtonefortransferredcalls=Ringtone2&cidmatchdid=1&dropanonymous=0&trustrpid=1&sendrpid=pai&trust_id_outbound=1&rpid_connectedline=0&rpid_update=1&pai_header=Header1&callgroup=3&pickupgroup=1,2,3&primary_trunk={{TrunkID1}}&secondary_trunk={{TrunkID2}}&tertiary_trunk={{TrunkID3}}&primary_emerg_trunk={{TrunkID4}}&secondary_emerg_trunk={{TrunkID2}}&tertiary_emerg_trunk={{TrunkID1}}&override_lcr=1&busylevel=12&limit_notify_play_sound=1&limit_notify_send_email=1&busyvoicemail=1&mailboxes={{ExtNumber2}},{{ExtNumber3}}&vmailpager=neki@email.com&vmailskipinst=1&vmailsaycid=1&vmailreview=1&vmailoperator=0&vmailenvelope=0&vmailhidefromdir=0&videosupport=1&autoframing=1&vmaildelay=15&vmailopext=903&vmailnrings=2&force_codec=opus&hd_logout_time=1&record_beep_ext=20&pbd_pin=98765&areacode=789&busylevel_incoming=2&jbimpl=fixed&jbmaxsize=30&jbresyncthreshold=15&jbtargetextra=1234&show_in_dir=1&show_in_app=1&vmailskippin=0&rating_info_osc=1&disable_fax_for_app=1&disable_my_dialer_for_app=0&app_default_client_phone=softphone",
+							"raw": "http://{{IP}}/index.php?apikey={{API_Key}}&action=pbxware.ext.edit&server={{TenantID}}&id={{ExtID4}}&name=NewNameExt4&email=sinisabicom1@gmail.com&ext=915&location=1&ua=127&secret=NewPassword1234!-_!%*&password=Password_-12!%*&pin=9876&prot=iax&status=2&incominglimit=10&outgoinglimit=5&voicemail=1&title=TestExtension&uad_sipheaders=SomeText&label=NewLabel&user_location=Cloud&user_language=English&dtmfmode=inband&authname=admin&auth=admin@admin.com&nat=2&canreinvite=1&qualify=5000&ringtime=20&incoming_dialoptions=Tr&outgoing_dialoptions=t&autoprovisiong=1&dhcp=0&staticip=123.123.123.123&netmask=255.255.0.0&gateway=123.123.123.1&dns1=8.8.8.8&dns2=123.123.123.2&voicemail_timezone=Bosnia and Herzegovina&vm_greeting_message=1&setcallerid=0&acodecs=gsm:alaw:h261&page=4&page_custom=Text123&recordcalls=1&recordsilent=1&vmailsend=1&vmailattach=1&vmaildelete=1&send_email=1&webrtc=1&defaultip=163.20.227.168&max_contacts=10&encryption=yes&directrtpsetup=1&callingpres=allowed_failed_screen&cid_anon=1&ringtoneforlocalcalls=Ringtone1&ringtonefortransferredcalls=Ringtone2&cidmatchdid=1&dropanonymous=0&trustrpid=1&sendrpid=pai&trust_id_outbound=1&rpid_connectedline=0&rpid_update=1&pai_header=Header1&callgroup=3&pickupgroup=1,2,3&primary_trunk={{TrunkID1}}&secondary_trunk={{TrunkID2}}&tertiary_trunk={{TrunkID3}}&primary_emerg_trunk={{TrunkID4}}&secondary_emerg_trunk={{TrunkID2}}&tertiary_emerg_trunk={{TrunkID1}}&override_lcr=1&busylevel=12&limit_notify_play_sound=1&limit_notify_send_email=1&busyvoicemail=1&mailboxes={{ExtNumber2}},{{ExtNumber3}}&vmailpager=neki@email.com&vmailskipinst=1&vmailsaycid=1&vmailreview=1&vmailoperator=0&vmailenvelope=0&vmailhidefromdir=0&videosupport=1&autoframing=1&vmaildelay=15&vmailopext=903&vmailnrings=2&force_codec=opus&hd_logout_time=1&record_beep_ext=20&pbd_pin=98765&areacode=789&busylevel_incoming=2&jbimpl=fixed&jbmaxsize=30&jbresyncthreshold=15&jbtargetextra=1234&show_in_dir=1&show_in_app=1&vmailskippin=0&rating_info_osc=1&sso_enabled=0&disable_fax_for_app=1&disable_my_dialer_for_app=0&app_default_client_phone=softphone",
 							"protocol": "http",
 							"host": [
 								"{{IP}}"
@@ -8186,8 +8229,7 @@
 								{
 									"key": "sso_enabled",
 									"value": "0",
-									"description": "Single Sign-On enabled (Yes=1, No=0)",
-									"disabled": true
+									"description": "Single Sign-On enabled (Yes=1, No=0)"
 								},
 								{
 									"key": "disable_fax_for_app",
@@ -19820,7 +19862,7 @@
 								{
 									"key": "dest_type",
 									"value": "0",
-									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6. IVR Tree\n"
+									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6: IVR tree\n7: Voicemail\n8: Remote Access\n9: Conferences\n10: Trunk\n11: Fax to E-mail\n12: Phone Callback\n13: Deny Access\n14: CRM Routing\n15: Agents\n16: ARI Application\n17: Parking Lot\n"
 								},
 								{
 									"key": "destination",
@@ -20397,7 +20439,7 @@
 								{
 									"key": "dest_type",
 									"value": "{{DestType}}",
-									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6. IVR Tree\n"
+									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6: IVR tree\n7: Voicemail\n8: Remote Access\n9: Conferences\n10: Trunk\n11: Fax to E-mail\n12: Phone Callback\n13: Deny Access\n14: CRM Routing\n15: Agents\n16: ARI Application\n17: Parking Lot\n"
 								},
 								{
 									"key": "destination",
@@ -20612,7 +20654,7 @@
 								{
 									"key": "dest_type",
 									"value": "{{DestType}}",
-									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6. IVR Tree\n"
+									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6: IVR tree\n7: Voicemail\n8: Remote Access\n9: Conferences\n10: Trunk\n11: Fax to E-mail\n12: Phone Callback\n13: Deny Access\n14: CRM Routing\n15: Agents\n16: ARI Application\n17: Parking Lot\n"
 								},
 								{
 									"key": "destination",
@@ -20826,7 +20868,7 @@
 								{
 									"key": "dest_type",
 									"value": "{{DestType}}",
-									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6. IVR Tree\n"
+									"description": "Destination Type for DID. (Required) (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6: IVR tree\n7: Voicemail\n8: Remote Access\n9: Conferences\n10: Trunk\n11: Fax to E-mail\n12: Phone Callback\n13: Deny Access\n14: CRM Routing\n15: Agents\n16: ARI Application\n17: Parking Lot\n"
 								},
 								{
 									"key": "destination",
@@ -21048,7 +21090,7 @@
 								{
 									"key": "dest_type",
 									"value": "",
-									"description": "Destination Type for DID. (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n",
+									"description": "Destination Type for DID. (Regex: /^\\\\d{1}$/)\n0: Extension\n1: Forward DID to Extension (Multi User)\n2: Ring Group\n3: IVR\n4: Queues\n5: External Number\n6: IVR tree\n7: Voicemail\n8: Remote Access\n9: Conferences\n10: Trunk\n11: Fax to E-mail\n12: Phone Callback\n13: Deny Access\n14: CRM Routing\n15: Agents\n16: ARI Application\n17: Parking Lot\n",
 									"disabled": true
 								},
 								{
@@ -26704,13 +26746,16 @@
 									"        pm.expect(responseBody).to.be.an('object');",
 									"        pm.expect(responseBody).to.have.property('success').that.is.a('string');",
 									"",
+									"        pm.collectionVariables.set(\"TenantID\", null);",
+									"",
 									"        // Print the success message",
 									"        //console.log('Success:', responseBody.success);",
 									"    });",
 									"}",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -26781,11 +26826,14 @@
 									"        // Print the success message and ID",
 									"        console.log('Success:', responseBody.success);",
 									"        console.log('Package ID:', responseBody.id);",
+									"",
+									"        pm.collectionVariables.set(\"TenantPackageID\", null);",
 									"    });",
 									"}",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
